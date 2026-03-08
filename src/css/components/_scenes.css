@@ -1097,7 +1097,7 @@
 /* Fire exhaust */
 .scene4__exhaust {
   position: absolute;
-  bottom: -4px;
+  top: 100%;
   left: 50%;
   transform: translateX(-50%);
   width: 40px;
@@ -1357,7 +1357,7 @@
     width: 36px;
     height: 72px;
   }
-  .scene4__exhaust { width: 28px; height: 50px; bottom: -3px; }
+  .scene4__exhaust { width: 28px; height: 50px; }
   .scene4__flame--outer { width: 14px; height: 40px; }
   .scene4__flame--mid { width: 10px; height: 30px; }
   .scene4__flame--core { width: 6px; height: 20px; }

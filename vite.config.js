@@ -43,12 +43,12 @@ function devApiPlugin() {
       toApi: { name_en: 'nameEn', name_ar: 'nameAr', position_en: 'positionEn', position_ar: 'positionAr', quote_en: 'quoteEn', quote_ar: 'quoteAr', display_order: 'order', image_url: 'imageUrl', is_active: null },
     },
     team: {
-      toDb: { nameEn: 'name_en', nameAr: 'name_ar', roleEn: 'role_en', roleAr: 'role_ar', quoteEn: 'quote_en', quoteAr: 'quote_ar', imageUrl: 'image_url', order: 'display_order' },
-      toApi: { name_en: 'nameEn', name_ar: 'nameAr', role_en: 'roleEn', role_ar: 'roleAr', quote_en: 'quoteEn', quote_ar: 'quoteAr', image_url: 'imageUrl', display_order: 'order', is_active: null },
+      toDb: { nameEn: 'name_en', nameAr: 'name_ar', roleEn: 'role_en', roleAr: 'role_ar', quoteEn: 'quote_en', quoteAr: 'quote_ar', image: 'image_url', imageUrl: 'image_url', order: 'display_order' },
+      toApi: { name_en: 'nameEn', name_ar: 'nameAr', role_en: 'roleEn', role_ar: 'roleAr', quote_en: 'quoteEn', quote_ar: 'quoteAr', image_url: 'image', display_order: 'order', is_active: null },
     },
     portfolio: {
-      toDb: { titleEn: 'title_en', titleAr: 'title_ar', descriptionEn: 'description_en', descriptionAr: 'description_ar', tagEn: 'tag_en', tagAr: 'tag_ar', imageUrl: 'image_url', order: 'display_order' },
-      toApi: { title_en: 'titleEn', title_ar: 'titleAr', description_en: 'descriptionEn', description_ar: 'descriptionAr', tag_en: 'tagEn', tag_ar: 'tagAr', image_url: 'imageUrl', display_order: 'order', is_active: null },
+      toDb: { titleEn: 'title_en', titleAr: 'title_ar', descriptionEn: 'description_en', descriptionAr: 'description_ar', tagEn: 'tag_en', tagAr: 'tag_ar', image: 'image_url', imageUrl: 'image_url', link: 'project_link', order: 'display_order' },
+      toApi: { title_en: 'titleEn', title_ar: 'titleAr', description_en: 'descriptionEn', description_ar: 'descriptionAr', tag_en: 'tagEn', tag_ar: 'tagAr', image_url: 'image', project_link: 'link', display_order: 'order', is_active: null },
     },
     offers: {
       toDb: { titleEn: 'title_en', titleAr: 'title_ar', descriptionEn: 'description_en', descriptionAr: 'description_ar', priceEn: 'price_en', priceAr: 'price_ar', badgeEn: 'badge_en', badgeAr: 'badge_ar', featuresEn: 'features_en', featuresAr: 'features_ar', order: 'display_order' },

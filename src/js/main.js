@@ -20,7 +20,7 @@ import { initScrollProgress } from './effects/scroll-progress.js';
 function lazyInit(importFn, exportName = 'default') {
   return () => importFn().then(m => {
     const fn = typeof exportName === 'string' ? m[exportName] : exportName(m);
-    if (typeof fn === 'function') fn();
+    if (typeof fn === 'function') return fn();
   });
 }
 
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Deferred: load after initial paint
+  // Deferred: load after initial paint — sequential to ensure correct ScrollTrigger pin ordering
   rIC(() => {
     const deferred = [
       ['Scene1', lazyInit(() => import('./scenes/scene-1.js'), 'initScene1')],
@@ -72,15 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
       ['PortfolioParallax', lazyInit(() => import('./effects/portfolio-parallax.js'), 'initPortfolioParallax')],
     ];
 
-    for (const [name, init] of deferred) {
-      try {
-        const result = init();
-        if (result && typeof result.catch === 'function') {
-          result.catch(err => console.error(`[Xfuse] Failed to init ${name}:`, err));
+    // Initialize sequentially so each ScrollTrigger pin is created in DOM order
+    // This prevents pin spacing overlap caused by concurrent async inits
+    (async () => {
+      for (const [name, init] of deferred) {
+        try {
+          await init();
+        } catch (err) {
+          console.error(`[Xfuse] Failed to init ${name}:`, err);
         }
-      } catch (err) {
-        console.error(`[Xfuse] Failed to init ${name}:`, err);
       }
-    }
+      // Recalculate all ScrollTrigger positions after all scenes (including async data loads) finish
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    })();
   }, { timeout: 2000 });
 });

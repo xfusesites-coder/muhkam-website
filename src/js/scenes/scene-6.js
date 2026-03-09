@@ -17,6 +17,7 @@ export async function initScene6() {
   const scanlines = scene.querySelector('.scene6__scanlines');
   const status = scene.querySelector('.scene6__status');
   const testimonials = scene.querySelectorAll('.scene6__testimonial');
+  const testimonialContainer = scene.querySelector('.scene6__testimonials');
   const counters = scene.querySelectorAll('.scene6__counter');
   const textEn = scene.querySelector('.scene6__headline[data-lang="en"]');
   const textAr = scene.querySelector('.scene6__headline[data-lang="ar"]');
@@ -25,7 +26,7 @@ export async function initScene6() {
     scrollTrigger: {
       trigger: scene,
       start: 'top top',
-      end: '+=300%',
+      end: '+=250%',
       pin: true,
       pinSpacing: true,
       scrub: 1,
@@ -71,16 +72,27 @@ export async function initScene6() {
     }
   });
 
-  // Testimonials appear as incoming transmissions
+  // Set container height to tallest testimonial (since they're absolutely positioned)
+  if (testimonialContainer && testimonials.length) {
+    // Temporarily make all visible to measure
+    testimonials.forEach(t => { t.style.opacity = '1'; t.style.position = 'relative'; });
+    let maxH = 0;
+    testimonials.forEach(t => { maxH = Math.max(maxH, t.offsetHeight); });
+    testimonials.forEach(t => { t.style.opacity = ''; t.style.position = ''; });
+    testimonialContainer.style.height = maxH + 'px';
+  }
+
+  // Testimonials appear one at a time as incoming transmissions
   const testimonialCount = testimonials.length;
-  const testimonialWindow = 0.55; // total timeline range for all testimonials (0.15 → 0.70)
-  const testimonialStagger = testimonialCount > 1 ? testimonialWindow / (testimonialCount - 1) : 0;
+  // Each testimonial gets an equal slice of the 0.12→0.72 range
+  const tSliceSize = testimonialCount > 0 ? 0.60 / testimonialCount : 0;
 
   testimonials.forEach((test, i) => {
     const signal = test.querySelector('.scene6__signal');
     const card = test.querySelector('.scene6__card');
     const stars = test.querySelectorAll('.scene6__star');
-    const startTime = 0.15 + i * testimonialStagger;
+    const startTime = 0.12 + i * tSliceSize;
+    const exitTime = startTime + tSliceSize * 0.75; // fade out at 75% of slice
 
     // Signal line appears first
     if (signal) {
@@ -91,10 +103,10 @@ export async function initScene6() {
       );
     }
 
-    // Reveal testimonial wrapper (has opacity: 0 in CSS)
+    // Reveal testimonial wrapper
     tl.fromTo(test,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.04 },
+      { opacity: 0, y: 30 },
+      { opacity: 1, y: 0, duration: 0.04 },
       startTime
     );
 
@@ -102,8 +114,8 @@ export async function initScene6() {
     if (card) {
       tl.fromTo(card,
         { scaleX: 0.3, scaleY: 0, opacity: 0, transformOrigin: 'left center' },
-        { scaleX: 1, scaleY: 1, opacity: 1, duration: 0.08, ease: 'back.out(1.2)' },
-        startTime + 0.04
+        { scaleX: 1, scaleY: 1, opacity: 1, duration: 0.06, ease: 'back.out(1.2)' },
+        startTime + 0.03
       );
     }
 
@@ -112,9 +124,14 @@ export async function initScene6() {
       tl.fromTo(star,
         { opacity: 0, scale: 0 },
         { opacity: 1, scale: 1, duration: 0.02, ease: 'back.out(2)' },
-        startTime + 0.1 + j * 0.02
+        startTime + 0.07 + j * 0.015
       );
     });
+
+    // Fade out before next testimonial (skip for the last one)
+    if (i < testimonialCount - 1) {
+      tl.to(test, { opacity: 0, y: -20, duration: 0.04 }, exitTime);
+    }
   });
 
   // Counter animations

@@ -1716,8 +1716,17 @@
   font-family: var(--font-arabic);
 }
 
-.scene6__testimonial {
+.scene6__testimonials {
   position: relative;
+  width: 100%;
+  min-height: 200px;
+}
+
+.scene6__testimonial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
   opacity: 0;
   will-change: opacity, transform;
 }

@@ -1,46 +1,47 @@
 /**
- * Xfuse — Testimonials (Swiper)
- * Loads data from Supabase → fallback to /data/testimonials.json
+ * Xfuse — Testimonials Section
+ * Dynamically rebuilds testimonial cards from Supabase data
+ * Loads data from Supabase → fallback to /data/testimonials.json → fallback to static HTML
  */
 import { fetchTable } from '../lib/supabase.js';
 
-function generateStarsHTML(count) {
-  const starSVG = '<svg class="star" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#star-grad)"/></svg>';
-  return starSVG.repeat(count);
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
 }
 
-function buildSlideHTML(item) {
-  return `<div class="swiper-slide">
-    <div class="testimonial-card">
-      <div class="testimonial-card__stars">${generateStarsHTML(item.rating || 5)}</div>
-      <blockquote class="testimonial-card__quote" data-lang="en">"${item.quoteEn}"</blockquote>
-      <blockquote class="testimonial-card__quote" data-lang="ar">"${item.quoteAr}"</blockquote>
-      <div class="testimonial-card__author">
-        <span class="testimonial-card__avatar">${item.initials}</span>
-        <div class="testimonial-card__info">
-          <span class="testimonial-card__name">${item.nameEn}</span>
-          <span class="testimonial-card__position" data-lang="en">${item.positionEn}</span>
-          <span class="testimonial-card__position" data-lang="ar">${item.positionAr}</span>
-        </div>
+function generateStarsHTML(count) {
+  const star = '<svg class="scene6__star" viewBox="0 0 24 24" width="16" height="16"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#star-grad)"/></svg>';
+  return star.repeat(count);
+}
+
+function buildTestimonialHTML(t) {
+  return `<div class="scene6__testimonial">
+    <div class="scene6__signal" aria-hidden="true"></div>
+    <div class="scene6__card">
+      <div class="scene6__stars">${generateStarsHTML(t.rating || 5)}</div>
+      <blockquote data-lang="en">"${escHtml(t.quoteEn)}"</blockquote>
+      <blockquote data-lang="ar">"${escHtml(t.quoteAr)}"</blockquote>
+      <div class="scene6__author">
+        <span class="scene6__author-name">${escHtml(t.nameEn)}</span>
+        <span class="scene6__author-role" data-lang="en">${escHtml(t.positionEn)}</span>
+        <span class="scene6__author-role" data-lang="ar">${escHtml(t.positionAr)}</span>
       </div>
     </div>
   </div>`;
 }
 
 export async function initTestimonials() {
-  if (typeof Swiper === 'undefined') return;
-
-  const container = document.querySelector('.testimonial-swiper');
+  const container = document.querySelector('.scene6__testimonials');
   if (!container) return;
 
-  // Load dynamic data from Supabase (with JSON fallback)
   try {
     const items = await fetchTable('testimonials', {
       fallbackUrl: '/data/testimonials.json',
       listKey: 'items',
     });
     if (items.length) {
-      // Map Supabase column names to template names
       const mapped = items.map(t => ({
         nameEn: t.name_en || t.nameEn || '',
         nameAr: t.name_ar || t.nameAr || '',
@@ -51,30 +52,9 @@ export async function initTestimonials() {
         initials: t.initials || '',
         rating: t.rating || 5,
       }));
-      const wrapper = container.querySelector('.swiper-wrapper');
-      if (wrapper) {
-        wrapper.innerHTML = mapped.map(buildSlideHTML).join('');
-      }
+      container.innerHTML = mapped.map(buildTestimonialHTML).join('');
     }
   } catch {
-    // fallback: keep existing HTML
+    // fallback: keep existing static HTML
   }
-
-  new Swiper(container, {
-    slidesPerView: 1,
-    spaceBetween: 30,
-    autoplay: {
-      delay: 5000,
-      disableOnInteraction: true,
-      pauseOnMouseEnter: true,
-    },
-    pagination: {
-      el: '.swiper-pagination',
-      clickable: true,
-    },
-    breakpoints: {
-      768: { slidesPerView: 2, spaceBetween: 20 },
-      1024: { slidesPerView: 3, spaceBetween: 30 },
-    },
-  });
 }

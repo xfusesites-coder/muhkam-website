@@ -3,8 +3,12 @@
  * Crew reveal with flip cards, typewriter quotes, constellation connections
  */
 import { prefersReducedMotion } from '../core/utils.js';
+import { initTeam } from '../components/team.js';
 
-export function initScene5() {
+export async function initScene5() {
+  // Load dynamic team data first (rebuilds .scene5__members DOM)
+  await initTeam();
+
   if (prefersReducedMotion() || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
   const scene = document.getElementById('scene-5');

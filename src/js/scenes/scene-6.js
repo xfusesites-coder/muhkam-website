@@ -3,8 +3,12 @@
  * Mission control theme — scanlines, incoming transmissions, counters
  */
 import { prefersReducedMotion } from '../core/utils.js';
+import { initTestimonials } from '../components/testimonials.js';
 
-export function initScene6() {
+export async function initScene6() {
+  // Load dynamic testimonial data first (rebuilds .scene6__testimonials DOM)
+  await initTestimonials();
+
   if (prefersReducedMotion() || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
   const scene = document.getElementById('scene-6');

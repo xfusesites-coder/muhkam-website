@@ -1,35 +1,51 @@
 /**
  * Xfuse — Team Section
- * Avatar selector + card transition + vanilla-tilt + orb positions
- * Loads data from Supabase → fallback to /data/team.json
+ * Dynamically rebuilds team member cards from Supabase data
+ * Loads data from Supabase → fallback to /data/team.json → fallback to static HTML
  */
 import { isDesktop, prefersReducedMotion } from '../core/utils.js';
 import { fetchTable } from '../lib/supabase.js';
 
-// Default fallback data
-let teamData = {
-  ak: {
-    initials: 'AK',
-    nameEn: 'Ahmed Alkharfy',
-    nameAr: 'أحمد الخرفي',
-    roleEn: 'CEO & Lead Developer',
-    roleAr: 'المدير التنفيذي والمطور الرئيسي',
-    quoteEn: '"Code should solve problems, not create them."',
-    quoteAr: '"الكود لازم يحل مشاكل، مش يعمل مشاكل."',
-  },
-};
+function escHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
 
-async function loadTeamData() {
+function buildMemberHTML(m) {
+  const imgSrc = m.imageUrl || '';
+  return `<div class="scene5__member" data-member="${escHtml(m.id)}">
+    <div class="scene5__card">
+      <div class="scene5__card-front">
+        <div class="scene5__avatar">
+          ${imgSrc ? `<img src="${escHtml(imgSrc)}" alt="${escHtml(m.nameEn)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">` : ''}
+          <span class="scene5__initials" ${imgSrc ? 'style="display:none"' : ''}>${escHtml(m.initials)}</span>
+        </div>
+        <h3 class="scene5__name" data-lang="en">${escHtml(m.nameEn)}</h3>
+        <h3 class="scene5__name" data-lang="ar">${escHtml(m.nameAr)}</h3>
+        <p class="scene5__role" data-lang="en">${escHtml(m.roleEn)}</p>
+        <p class="scene5__role" data-lang="ar">${escHtml(m.roleAr)}</p>
+      </div>
+    </div>
+    <blockquote class="scene5__quote">
+      <span data-lang="en">"${escHtml(m.quoteEn)}"</span>
+      <span data-lang="ar">"${escHtml(m.quoteAr)}"</span>
+    </blockquote>
+  </div>`;
+}
+
+export async function initTeam() {
+  const membersContainer = document.querySelector('.scene5__members');
+  if (!membersContainer) return;
+
   try {
     const members = await fetchTable('team', {
       fallbackUrl: '/data/team.json',
       listKey: 'members',
     });
     if (members.length) {
-      teamData = {};
-      // Map Supabase column names to template names
       const mapped = members.map(m => ({
-        id: m.id,
+        id: m.id || m.initials?.toLowerCase() || '',
         initials: m.initials || '',
         nameEn: m.name_en || m.nameEn || '',
         nameAr: m.name_ar || m.nameAr || '',
@@ -37,112 +53,11 @@ async function loadTeamData() {
         roleAr: m.role_ar || m.roleAr || '',
         quoteEn: m.quote_en || m.quoteEn || '',
         quoteAr: m.quote_ar || m.quoteAr || '',
-        linkedin: m.linkedin || '',
-        github: m.github || '',
+        imageUrl: m.image_url || m.image || '',
       }));
-      mapped.forEach(m => {
-        teamData[m.id] = {
-          initials: m.initials,
-          nameEn: m.nameEn,
-          nameAr: m.nameAr,
-          roleEn: m.roleEn,
-          roleAr: m.roleAr,
-          quoteEn: `"${m.quoteEn}"`,
-          quoteAr: `"${m.quoteAr}"`,
-          linkedin: m.linkedin,
-          github: m.github,
-        };
-      });
-      buildAvatarButtons(mapped);
+      membersContainer.innerHTML = mapped.map(buildMemberHTML).join('');
     }
   } catch {
-    // fallback: keep default data
+    // fallback: keep existing static HTML
   }
-}
-
-function buildAvatarButtons(members) {
-  const avatarsContainer = document.querySelector('.team-avatars');
-  if (!avatarsContainer) return;
-
-  avatarsContainer.innerHTML = members.map((m, i) =>
-    `<button class="team-avatar${i === 0 ? ' active' : ''}" data-member="${m.id}" aria-label="${m.nameEn}" type="button">
-      <span class="team-avatar__initials">${m.initials}</span>
-    </button>`
-  ).join('');
-}
-
-export async function initTeam() {
-  const teamCard = document.querySelector('.team-card');
-  const teamSection = document.querySelector('.team-section');
-
-  if (!teamCard) return;
-
-  // Load dynamic data
-  await loadTeamData();
-
-  const firstMemberId = Object.keys(teamData)[0];
-  const avatars = document.querySelectorAll('.team-avatar');
-
-  if (!avatars.length) return;
-
-  // Set default active member
-  updateTeamCard(firstMemberId);
-  if (teamSection) teamSection.dataset.activeMember = firstMemberId;
-
-  avatars.forEach(avatar => {
-    avatar.addEventListener('click', () => {
-      const member = avatar.dataset.member;
-      if (!member || !teamData[member]) return;
-
-      // Update active avatar
-      avatars.forEach(a => a.classList.remove('active'));
-      avatar.classList.add('active');
-
-      // Animate card out
-      teamCard.classList.add('hide-card');
-      teamCard.classList.remove('show-card');
-
-      setTimeout(() => {
-        updateTeamCard(member);
-        if (teamSection) teamSection.dataset.activeMember = member;
-
-        teamCard.classList.remove('hide-card');
-        teamCard.classList.add('show-card');
-      }, 400);
-    });
-  });
-
-  // Init vanilla-tilt on desktop only
-  if (isDesktop() && !prefersReducedMotion() && typeof VanillaTilt !== 'undefined') {
-    VanillaTilt.init(teamCard, {
-      max: 8,
-      speed: 400,
-      glare: true,
-      'max-glare': 0.15,
-    });
-  }
-}
-
-function updateTeamCard(memberId) {
-  const data = teamData[memberId];
-  if (!data) return;
-
-  const card = document.querySelector('.team-card');
-  if (!card) return;
-
-  const initials = card.querySelector('.team-card__initials');
-  const nameEn = card.querySelector('.team-card__name [data-lang="en"]');
-  const nameAr = card.querySelector('.team-card__name [data-lang="ar"]');
-  const roleEn = card.querySelector('.team-card__role [data-lang="en"]');
-  const roleAr = card.querySelector('.team-card__role [data-lang="ar"]');
-  const quoteEn = card.querySelector('.team-card__quote [data-lang="en"]');
-  const quoteAr = card.querySelector('.team-card__quote [data-lang="ar"]');
-
-  if (initials) initials.textContent = data.initials;
-  if (nameEn) nameEn.textContent = data.nameEn;
-  if (nameAr) nameAr.textContent = data.nameAr;
-  if (roleEn) roleEn.textContent = data.roleEn;
-  if (roleAr) roleAr.textContent = data.roleAr;
-  if (quoteEn) quoteEn.textContent = data.quoteEn;
-  if (quoteAr) quoteAr.textContent = data.quoteAr;
 }

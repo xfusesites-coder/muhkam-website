@@ -25,7 +25,7 @@ export async function initScene6() {
     scrollTrigger: {
       trigger: scene,
       start: 'top top',
-      end: '+=200%',
+      end: '+=300%',
       pin: true,
       pinSpacing: true,
       scrub: 1,

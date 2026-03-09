@@ -15,6 +15,7 @@
   --border-glass:    rgba(0, 0, 0, 0.08);
   --success:         #16A34A;
   --error:           #DC2626;
+  color-scheme: light;
 }
 
 /* Light mode overrides for noise */
@@ -37,21 +38,30 @@
   background-color: #000;
 }
 
-/* Scenes 4 & 6 always stay dark — they have space/mission-control themes */
-[data-theme="light"] .scene--portfolio {
-  color: var(--text-primary);
-}
-
-[data-theme="light"] .scene--testimonials {
-  color: var(--text-primary);
-}
-
-/* Scene 2 — blueprint: softer blue bg */
+/* ---- Scene 2 — Strategy/Blueprint ---- */
 [data-theme="light"] .scene--strategy {
   background-color: #e8eef6;
 }
 
-/* Scene 3 — code editor keeps dark, mockup lightens */
+[data-theme="light"] .scene2__palette {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .scene2__swatch {
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .scene2__annotation-value {
+  color: #be185d;
+}
+
+[data-theme="light"] .scene2__annotation-line {
+  background: rgba(190, 24, 93, 0.35);
+}
+
+/* ---- Scene 3 — Development ---- */
+/* Editor/terminal stay dark intentionally */
 [data-theme="light"] .scene3__mockup {
   background: var(--bg-card);
 }
@@ -60,17 +70,99 @@
   background: var(--bg-surface);
 }
 
-/* Scene 5 — team cards */
+[data-theme="light"] .scene3__marquee {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+/* ---- Scene 4 — Portfolio 🔴 CRITICAL ---- */
+[data-theme="light"] .scene--portfolio {
+  background: var(--bg-primary) !important;
+  background-color: var(--bg-primary) !important;
+}
+
+[data-theme="light"] .scene4__stars,
+[data-theme="light"] .scene4__stars::before,
+[data-theme="light"] .scene4__stars::after {
+  display: none;
+}
+
+[data-theme="light"] .scene4__headline,
+[data-theme="light"] .scene4__project-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .scene4__desc,
+[data-theme="light"] .scene4__project-desc {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .scene4__project-tag {
+  color: var(--accent-primary);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+[data-theme="light"] .scene4__project-metric {
+  background: rgba(59, 130, 246, 0.06);
+}
+
+[data-theme="light"] .scene4__project-card {
+  background: var(--bg-card);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+/* ---- Scene 5 — Team ---- */
 [data-theme="light"] .scene5__card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-/* Scene 6 — testimonial cards */
+[data-theme="light"] .scene5__card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Scene 6 — Testimonials 🔴 CRITICAL ---- */
+[data-theme="light"] .scene--testimonials {
+  background: var(--bg-primary) !important;
+  background-color: var(--bg-primary) !important;
+}
+
+[data-theme="light"] .scene6__scanlines {
+  display: none;
+}
+
+[data-theme="light"] .scene6__headline {
+  color: var(--text-primary);
+}
+
 [data-theme="light"] .scene6__card {
+  background: var(--bg-card);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-/* Scene 7 — contact form */
+[data-theme="light"] .scene6__card blockquote {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .scene6__author {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .scene6__author-role {
+  color: var(--text-muted);
+}
+
+[data-theme="light"] .scene6__counter-num {
+  color: var(--accent-primary);
+}
+
+[data-theme="light"] .scene6__counter-label {
+  color: var(--text-secondary);
+}
+
+[data-theme="light"] .scene6__card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* ---- Scene 7 — Contact ---- */
 [data-theme="light"] .scene7__form-wrap {
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.06);
 }
@@ -81,11 +173,20 @@
 
 [data-theme="light"] .scene7__field .form-input:focus {
   background: #fff;
+  border-color: var(--accent-primary);
 }
 
-/* Offers — light theme */
+[data-theme="light"] .scene7__guarantee {
+  background: rgba(34, 197, 94, 0.06);
+}
+
+/* ---- Offers ---- */
 [data-theme="light"] .offers__card {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .offers__card:hover {
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
 
 [data-theme="light"] .offers__card--popular {
@@ -96,17 +197,35 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
 }
 
-/* FAQ — light theme */
+[data-theme="light"] .offer-card__features li {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ---- FAQ ---- */
 [data-theme="light"] .faq__item {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
 
-/* Scene 7 guarantee — light theme */
-[data-theme="light"] .scene7__guarantee {
-  background: rgba(34, 197, 94, 0.06);
+/* ---- Nav scene overrides ---- */
+[data-theme="light"][data-scene="0"] .nav--scrolled {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
 }
 
-/* Portfolio metrics — light theme */
-[data-theme="light"] .scene4__project-metric {
-  background: rgba(59, 130, 246, 0.06);
+/* ---- Footer ---- */
+[data-theme="light"] .footer__socials a {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .footer__socials a:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+/* ---- Preloader ---- */
+[data-theme="light"] .preloader {
+  background: #F8FAFC;
+}
+
+[data-theme="light"] .preloader__bar {
+  background: rgba(0, 0, 0, 0.08);
 }

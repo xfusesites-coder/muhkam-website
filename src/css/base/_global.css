@@ -102,3 +102,52 @@ html {
 .no-js [data-lang="en"] {
   display: revert !important;
 }
+
+/* No-JS: show all scene content */
+.no-js .scene {
+  opacity: 1 !important;
+}
+
+.no-js .scene1__orbit-item,
+.no-js .scene1__orbit-ring,
+.no-js .scene1__logo,
+.no-js .scene1__headline,
+.no-js .scene1__desc,
+.no-js .scene1__stat,
+.no-js .scene1__orbit-desc,
+.no-js .scene2__grid,
+.no-js .scene2__wireframe text,
+.no-js .scene2__annotations,
+.no-js .scene2__cursor,
+.no-js .scene2__palette,
+.no-js .scene2__mockup,
+.no-js .scene2__headline,
+.no-js .scene2__desc,
+.no-js .scene3__headline,
+.no-js .scene3__desc,
+.no-js .scene4__headline,
+.no-js .scene4__desc,
+.no-js .scene4__project,
+.no-js .scene5__headline,
+.no-js .scene5__desc,
+.no-js .scene5__member,
+.no-js .scene6__headline,
+.no-js .scene6__testimonial,
+.no-js .scene6__counter,
+.no-js .scene6__status,
+.no-js .scene7__headline,
+.no-js .scene7__desc,
+.no-js .scene7__guarantee,
+.no-js .scene7__form-wrap,
+.no-js .offers__headline,
+.no-js .offers__desc,
+.no-js .offers__card,
+.no-js .offers__custom,
+.no-js .faq__headline,
+.no-js .faq__desc,
+.no-js .faq__item {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  clip-path: none !important;
+}

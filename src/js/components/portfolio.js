@@ -1,8 +1,9 @@
 /**
  * Xfuse — Portfolio Section
- * Loads data from /data/portfolio.json
+ * Loads data from Supabase → fallback to /data/portfolio.json
  */
 import { prefersReducedMotion } from '../core/utils.js';
+import { fetchTable } from '../lib/supabase.js';
 
 function buildCardHTML(project) {
   const featuredClass = project.featured ? ' portfolio-card--featured' : '';
@@ -33,16 +34,27 @@ function buildCardHTML(project) {
 export async function initPortfolio() {
   const grid = document.querySelector('.portfolio-grid');
 
-  // Load dynamic data
+  // Load dynamic data from Supabase (with JSON fallback)
   if (grid) {
     try {
-      const res = await fetch('/data/portfolio.json');
-      if (res.ok) {
-        const json = await res.json();
-        const projects = (json.projects || []).sort((a, b) => a.order - b.order);
-        if (projects.length) {
-          grid.innerHTML = projects.map(buildCardHTML).join('');
-        }
+      const projects = await fetchTable('portfolio', {
+        fallbackUrl: '/data/portfolio.json',
+        listKey: 'projects',
+      });
+      if (projects.length) {
+        // Map Supabase column names to template names
+        const mapped = projects.map(p => ({
+          titleEn: p.title_en || p.titleEn || '',
+          titleAr: p.title_ar || p.titleAr || '',
+          descriptionEn: p.description_en || p.descriptionEn || '',
+          descriptionAr: p.description_ar || p.descriptionAr || '',
+          tagEn: p.tag_en || p.tagEn || '',
+          tagAr: p.tag_ar || p.tagAr || '',
+          image: p.image_url || p.image || '',
+          link: p.project_link || p.link || '',
+          featured: p.featured || false,
+        }));
+        grid.innerHTML = mapped.map(buildCardHTML).join('');
       }
     } catch {
       // fallback: keep existing HTML

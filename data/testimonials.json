@@ -35,6 +35,18 @@
       "quoteAr": "المنصة الجديدة بتستحمل 10 أضعاف ترافيك المنصة القديمة، بدون أي عطل. الفريق سلّم بالظبط اللي وعدوا بيه.",
       "rating": 4,
       "order": 3
+    },
+    {
+      "id": "t1773011678911",
+      "nameEn": "Omar Elsherif",
+      "nameAr": "عمر الشريف",
+      "initials": "OE",
+      "positionEn": "Founder & CEO, DigitalScope",
+      "positionAr": "المؤسس والمدير التنفيذي، ديجيتال سكوب",
+      "quoteEn": "The Xfuse team are not just developers — they are success partners. From the very first meeting, I felt they understood my vision. The result was a product beyond expectations.",
+      "quoteAr": "فريق Xfuse مش مجرد مبرمجين — دول شركاء نجاح. من أول اجتماع حسّيت إنهم فاهمين الرؤية بتاعتي. النتيجة كانت منتج يفوق التوقعات.",
+      "rating": 5,
+      "order": 4
     }
   ]
 }

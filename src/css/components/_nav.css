@@ -288,3 +288,11 @@
 [data-scene="7"] .nav__link[href="#scene-7"] {
   color: var(--text-primary);
 }
+
+[data-scene="offers"] .nav__link[href="#scene-offers"] {
+  color: var(--text-primary);
+}
+
+[data-scene="offers"] .nav__link[href="#scene-offers"]::after {
+  width: 100%;
+}

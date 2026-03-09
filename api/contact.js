@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
 const SECRET = process.env.CSRF_SECRET || crypto.randomBytes(32).toString('hex');
 const TOKEN_TTL = 30 * 60 * 1000;
@@ -83,6 +84,24 @@ export default async function handler(req, res) {
     if (!valid) return res.status(400).json({ error: 'Validation failed', details: errors });
 
     if (req.body.website) return res.status(200).json({ success: true });
+
+    // Save to Supabase
+    const supabaseUrl = process.env.VITE_SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (supabaseUrl && supabaseKey) {
+      try {
+        const supabase = createClient(supabaseUrl, supabaseKey);
+        await supabase.from('contact_submissions').insert({
+          name: sanitized.name,
+          email: sanitized.email,
+          company: sanitized.company || null,
+          message: sanitized.message,
+          status: 'new',
+        });
+      } catch (dbErr) {
+        console.error('Supabase insert error:', dbErr);
+      }
+    }
 
     const apiKey = process.env.SENDGRID_API_KEY;
     if (!apiKey) {

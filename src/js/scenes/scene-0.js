@@ -14,6 +14,7 @@ class ParticleSystem {
     this.particles = [];
     this.targetPositions = [];
     this.progress = 0; // 0 = burst, 1 = formed
+    this.ambientTime = 0;
     this.resize();
   }
 
@@ -46,6 +47,12 @@ class ParticleSystem {
         size: 1.5 + Math.random() * 2.5,
         alpha: 0.3 + Math.random() * 0.7,
         delay: Math.random() * 0.3,
+        // Ambient floating properties
+        ambientX: Math.random() * this.w,
+        ambientY: Math.random() * this.h,
+        ambientSpeedX: (Math.random() - 0.5) * 0.3,
+        ambientSpeedY: (Math.random() - 0.5) * 0.3,
+        ambientPhase: Math.random() * Math.PI * 2,
       });
     }
   }
@@ -93,15 +100,31 @@ class ParticleSystem {
 
   draw() {
     this.ctx.clearRect(0, 0, this.w, this.h);
+    this.ambientTime += 0.01;
 
     for (const p of this.particles) {
       const t = Math.max(0, Math.min(1, (this.progress - p.delay) / (1 - p.delay)));
-      const ease = t * t * (3 - 2 * t); // smoothstep
 
-      if (this.progress < 0.1) {
-        // Pre-burst: particles at center
-        p.x = this.cx;
-        p.y = this.cy;
+      if (this.progress < 0.05) {
+        // Ambient mode: gentle floating particles
+        const floatX = Math.sin(this.ambientTime + p.ambientPhase) * 20;
+        const floatY = Math.cos(this.ambientTime * 0.7 + p.ambientPhase) * 15;
+        p.x = p.ambientX + floatX;
+        p.y = p.ambientY + floatY;
+
+        // Wrap around edges
+        if (p.x < -10) p.ambientX = this.w + 10;
+        if (p.x > this.w + 10) p.ambientX = -10;
+        if (p.y < -10) p.ambientY = this.h + 10;
+        if (p.y > this.h + 10) p.ambientY = -10;
+        p.ambientX += p.ambientSpeedX;
+        p.ambientY += p.ambientSpeedY;
+      } else if (this.progress < 0.1) {
+        // Transition: particles gather toward center
+        const gatherT = (this.progress - 0.05) / 0.05;
+        const gatherEase = gatherT * gatherT;
+        p.x = p.ambientX + (this.cx - p.ambientX) * gatherEase;
+        p.y = p.ambientY + (this.cy - p.ambientY) * gatherEase;
       } else if (this.progress < 0.4) {
         // Burst phase: fly outward
         const burstT = (this.progress - 0.1) / 0.3;
@@ -116,7 +139,11 @@ class ParticleSystem {
         p.y = p.burstY + (p.targetY - p.burstY) * formEase;
       }
 
-      const alpha = this.progress < 0.05 ? this.progress / 0.05 * p.alpha : p.alpha;
+      const alpha = this.progress < 0.05
+        ? p.alpha * 0.3 // Ambient: dim particles
+        : this.progress < 0.1
+          ? p.alpha * (0.3 + 0.7 * ((this.progress - 0.05) / 0.05))
+          : p.alpha;
 
       this.ctx.beginPath();
       this.ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
@@ -142,6 +169,9 @@ export function initScene0() {
   const textEn = scene.querySelector('.scene0__text[data-lang="en"]');
   const textAr = scene.querySelector('.scene0__text[data-lang="ar"]');
   const logoText = scene.querySelector('.scene0__logo-text');
+  const welcomeEn = scene.querySelector('.scene0__welcome[data-lang="en"]');
+  const welcomeAr = scene.querySelector('.scene0__welcome[data-lang="ar"]');
+  const scrollHint = scene.querySelector('.scene0__scroll-hint');
 
   if (!canvas || !dot) return;
 
@@ -209,8 +239,31 @@ export function initScene0() {
       onLeaveBack: () => {
         scene.classList.remove('scene--active');
       },
+      // Clear CSS animations on first scroll so GSAP inline styles can override them
+      // (CSS animation fill-mode: both takes precedence over inline styles)
+      onUpdate: (self) => {
+        if (self.progress > 0 && !self._animCleared) {
+          self._animCleared = true;
+          [welcomeEn, welcomeAr, scrollHint].forEach(el => {
+            if (el) el.style.animation = 'none';
+          });
+        }
+      },
     },
   });
+
+  // Phase 0: Welcome text fades out as scroll begins (0% - 10%)
+  // Use fromTo with explicit from={opacity:1} because tl.to() captures the wrong
+  // initial opacity (0) from the CSS animation's delay/fill-mode state.
+  if (welcomeEn) {
+    tl.fromTo(welcomeEn, { opacity: 1, filter: 'blur(0px)' }, { opacity: 0, y: -40, filter: 'blur(10px)', duration: 0.1, ease: 'power2.in', immediateRender: false }, 0);
+  }
+  if (welcomeAr) {
+    tl.fromTo(welcomeAr, { opacity: 1, filter: 'blur(0px)' }, { opacity: 0, y: -40, filter: 'blur(10px)', duration: 0.1, ease: 'power2.in', immediateRender: false }, 0);
+  }
+  if (scrollHint) {
+    tl.fromTo(scrollHint, { opacity: 1 }, { opacity: 0, duration: 0.05, ease: 'power2.in', immediateRender: false }, 0);
+  }
 
   // Phase 1: Dot grows and glows (0% - 15%)
   tl.fromTo(dot,

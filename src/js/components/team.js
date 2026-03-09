@@ -1,9 +1,10 @@
 /**
  * Xfuse — Team Section
  * Avatar selector + card transition + vanilla-tilt + orb positions
- * Loads data from /data/team.json
+ * Loads data from Supabase → fallback to /data/team.json
  */
 import { isDesktop, prefersReducedMotion } from '../core/utils.js';
+import { fetchTable } from '../lib/supabase.js';
 
 // Default fallback data
 let teamData = {
@@ -20,28 +21,39 @@ let teamData = {
 
 async function loadTeamData() {
   try {
-    const res = await fetch('/data/team.json');
-    if (res.ok) {
-      const json = await res.json();
-      const members = (json.members || []).sort((a, b) => a.order - b.order);
-      if (members.length) {
-        teamData = {};
-        members.forEach(m => {
-          teamData[m.id] = {
-            initials: m.initials,
-            nameEn: m.nameEn,
-            nameAr: m.nameAr,
-            roleEn: m.roleEn,
-            roleAr: m.roleAr,
-            quoteEn: `"${m.quoteEn}"`,
-            quoteAr: `"${m.quoteAr}"`,
-            linkedin: m.linkedin || '',
-            github: m.github || '',
-          };
-        });
-        // Rebuild avatar buttons
-        buildAvatarButtons(members);
-      }
+    const members = await fetchTable('team', {
+      fallbackUrl: '/data/team.json',
+      listKey: 'members',
+    });
+    if (members.length) {
+      teamData = {};
+      // Map Supabase column names to template names
+      const mapped = members.map(m => ({
+        id: m.id,
+        initials: m.initials || '',
+        nameEn: m.name_en || m.nameEn || '',
+        nameAr: m.name_ar || m.nameAr || '',
+        roleEn: m.role_en || m.roleEn || '',
+        roleAr: m.role_ar || m.roleAr || '',
+        quoteEn: m.quote_en || m.quoteEn || '',
+        quoteAr: m.quote_ar || m.quoteAr || '',
+        linkedin: m.linkedin || '',
+        github: m.github || '',
+      }));
+      mapped.forEach(m => {
+        teamData[m.id] = {
+          initials: m.initials,
+          nameEn: m.nameEn,
+          nameAr: m.nameAr,
+          roleEn: m.roleEn,
+          roleAr: m.roleAr,
+          quoteEn: `"${m.quoteEn}"`,
+          quoteAr: `"${m.quoteAr}"`,
+          linkedin: m.linkedin,
+          github: m.github,
+        };
+      });
+      buildAvatarButtons(mapped);
     }
   } catch {
     // fallback: keep default data

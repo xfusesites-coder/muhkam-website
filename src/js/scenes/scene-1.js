@@ -4,9 +4,12 @@
  * Stats counter + constellation lines between services
  */
 import { prefersReducedMotion } from '../core/utils.js';
+import { loadStats } from '../components/stats-loader.js';
 
-export function initScene1() {
+export async function initScene1() {
   if (prefersReducedMotion() || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  await loadStats();
 
   const scene = document.getElementById('scene-1');
   if (!scene) return;

@@ -674,15 +674,23 @@
       .form-row { grid-template-columns: 1fr; }
       .item-card { flex-wrap: wrap; }
       .item-card__actions { width: 100%; justify-content: flex-end; }
+      .item-card__content { width: 100%; flex-basis: 100%; }
       .topbar { padding: 0.75rem 1rem; }
-      .nav-tab { padding: 0.6rem 0.75rem; font-size: 0.8rem; }
+      .nav-tabs { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .nav-tabs::-webkit-scrollbar { display: none; }
+      .nav-tab { flex: 0 0 auto; padding: 0.6rem 0.75rem; font-size: 0.8rem; }
       .modal { max-height: 95vh; }
       .overview-grid { grid-template-columns: 1fr 1fr; }
+      .section-header { flex-wrap: wrap; gap: 0.75rem; }
     }
 
     @media (max-width: 480px) {
       .overview-grid { grid-template-columns: 1fr; }
       .nav-tabs { flex-wrap: nowrap; }
+      .nav-tab { flex: 0 0 auto; font-size: 0.75rem; padding: 0.5rem 0.6rem; }
+      .item-card__name { white-space: normal; }
+      .item-card__sub { white-space: normal; }
+      .topbar__btn { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
     }
 
     /* Scrollbar */
@@ -714,6 +722,182 @@
       transition: opacity 0.3s;
     }
     .loading-overlay.hide { opacity: 0; pointer-events: none; }
+
+    /* ==================== VALIDATION ==================== */
+    .form-input.invalid, .form-textarea.invalid { border-color: var(--error); }
+    .form-input.invalid:focus, .form-textarea.invalid:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+    .form-label .required { color: var(--error); margin-right: 0.25rem; }
+
+    /* ==================== IMAGE PREVIEW ==================== */
+    .image-preview {
+      margin-top: 0.5rem;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--bg-elevated);
+      max-width: 200px;
+      min-height: 40px;
+      display: none;
+    }
+    .image-preview.visible { display: block; }
+    .image-preview img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: cover;
+      max-height: 120px;
+    }
+    .image-preview__error {
+      padding: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* ==================== ERROR BANNER ==================== */
+    .error-banner {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--error);
+      font-size: 0.9rem;
+    }
+    .error-banner__icon { font-size: 1.25rem; flex-shrink: 0; }
+    .error-banner__text { flex: 1; }
+    .error-banner__close {
+      background: none; border: none; color: var(--error);
+      cursor: pointer; font-size: 1.1rem; padding: 0.25rem;
+      opacity: 0.7; transition: opacity 0.2s;
+    }
+    .error-banner__close:hover { opacity: 1; }
+
+    /* ==================== ITEM DELETE ANIMATION ==================== */
+    .item-card.removing {
+      animation: slideOutRight 0.3s ease forwards;
+      pointer-events: none;
+    }
+    @keyframes slideOutRight {
+      to { opacity: 0; transform: translateX(40px); max-height: 0; margin: 0; padding: 0; overflow: hidden; }
+    }
+
+    /* ==================== CONTENT WARNINGS ==================== */
+    .content-warning {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      font-size: 0.7rem;
+      color: var(--warning);
+      margin-right: 0.5rem;
+    }
+
+    /* ==================== SEARCH BAR ==================== */
+    .search-bar {
+      margin-bottom: 1rem;
+      position: relative;
+    }
+    .search-bar__input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.65rem 1rem 0.65rem 2.5rem;
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .search-bar__input:focus { border-color: var(--accent); }
+    .search-bar__icon {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+      pointer-events: none;
+      font-size: 0.9rem;
+    }
+
+    /* ==================== LIGHT THEME ==================== */
+    [data-theme="light"] {
+      --bg-primary: #F1F5F9;
+      --bg-card: #FFFFFF;
+      --bg-elevated: #F8FAFC;
+      --bg-surface: #E2E8F0;
+      --text-primary: #1E293B;
+      --text-secondary: #475569;
+      --text-muted: #94A3B8;
+      --border: rgba(0, 0, 0, 0.08);
+      --border-glass: rgba(0, 0, 0, 0.12);
+      --shadow: 0 8px 32px rgba(0,0,0,0.08);
+    }
+
+    body { transition: background-color 0.3s ease, color 0.3s ease; }
+    .login-page, .topbar, .nav-tabs, .item-card, .modal, .confirm-dialog,
+    .overview-card, .panel, .search-bar__input, .form-input, .form-textarea {
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .theme-toggle {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.4rem 0.7rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
+
+    /* ==================== EXPORT/IMPORT ==================== */
+    .data-actions {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    .data-actions .btn--sm {
+      font-size: 0.8rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
+    }
+    .btn--success {
+      background: var(--success);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      border-radius: var(--radius-sm);
+      padding: 0.5rem 1rem;
+      transition: opacity 0.2s;
+    }
+    .btn--success:hover { opacity: 0.85; }
+    .import-input { display: none; }
+
+    /* ==================== SHORTCUT HINT ==================== */
+    .shortcut-hint {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .kbd {
+      background: var(--bg-elevated);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.4rem;
+      font-family: monospace;
+      font-size: 0.7rem;
+    }
   </style>
 </head>
 <body>
@@ -745,6 +929,7 @@
         <span class="topbar__label">لوحة التحكم</span>
       </div>
       <div class="topbar__actions">
+        <button class="theme-toggle" id="themeToggle" title="تبديل الوضع الليلي/النهاري">🌙</button>
         <a href="/" target="_blank" class="topbar__btn">🌐 الموقع</a>
         <button class="topbar__btn topbar__btn--danger" id="logoutBtn">🚪 خروج</button>
       </div>
@@ -777,6 +962,11 @@
           العروض
           <span class="nav-tab__count" id="countOffers">0</span>
         </button>
+        <button class="nav-tab" data-panel="messages">
+          <span class="nav-tab__icon">📧</span>
+          الرسائل
+          <span class="nav-tab__count" id="countMessages">0</span>
+        </button>
         <button class="nav-tab" data-panel="settings">
           <span class="nav-tab__icon">⚙️</span>
           الإعدادات
@@ -784,6 +974,7 @@
       </nav>
 
       <!-- ===== OVERVIEW PANEL ===== -->
+      <div id="errorBanner"></div>
       <div class="panel active" id="panelOverview">
         <div class="overview-grid">
           <div class="overview-card" data-goto="testimonials">
@@ -806,6 +997,11 @@
             <div class="overview-card__count" id="overviewOffers">0</div>
             <div class="overview-card__label">عرض خاص</div>
           </div>
+          <div class="overview-card" data-goto="messages">
+            <div class="overview-card__icon">📧</div>
+            <div class="overview-card__count" id="overviewMessages">0</div>
+            <div class="overview-card__label">رسالة</div>
+          </div>
         </div>
       </div>
 
@@ -814,6 +1010,10 @@
         <div class="panel-header">
           <h2 class="panel-title">💬 كلام عملائنا</h2>
           <button class="btn" id="addTestimonialBtn">+ إضافة شهادة</button>
+        </div>
+        <div class="search-bar">
+          <span class="search-bar__icon">🔍</span>
+          <input class="search-bar__input" id="searchTestimonials" placeholder="بحث في شهادات العملاء..." data-search="testimonials">
         </div>
         <div class="items-list" id="testimonialsList"></div>
       </div>
@@ -824,6 +1024,10 @@
           <h2 class="panel-title">👥 العقول اللي ورا السحر</h2>
           <button class="btn" id="addTeamBtn">+ إضافة عضو</button>
         </div>
+        <div class="search-bar">
+          <span class="search-bar__icon">🔍</span>
+          <input class="search-bar__input" id="searchTeam" placeholder="بحث في الفريق..." data-search="team">
+        </div>
         <div class="items-list" id="teamList"></div>
       </div>
 
@@ -832,6 +1036,10 @@
         <div class="panel-header">
           <h2 class="panel-title">🎨 مشاريع بتتكلم عن نفسها</h2>
           <button class="btn" id="addProjectBtn">+ إضافة مشروع</button>
+        </div>
+        <div class="search-bar">
+          <span class="search-bar__icon">🔍</span>
+          <input class="search-bar__input" id="searchPortfolio" placeholder="بحث في المشاريع..." data-search="portfolio">
         </div>
         <div class="items-list" id="portfolioList"></div>
       </div>
@@ -842,7 +1050,28 @@
           <h2 class="panel-title">🌟 العروض الخاصة</h2>
           <button class="btn" id="addOfferBtn">+ إضافة عرض</button>
         </div>
+        <div class="search-bar">
+          <span class="search-bar__icon">🔍</span>
+          <input class="search-bar__input" id="searchOffers" placeholder="بحث في العروض..." data-search="offers">
+        </div>
         <div class="items-list" id="offersList"></div>
+      </div>
+
+      <!-- ===== MESSAGES PANEL ===== -->
+      <div class="panel" id="panelMessages">
+        <div class="panel-header">
+          <h2 class="panel-title">📧 رسائل العملاء</h2>
+          <div style="display:flex;gap:0.5rem;align-items:center">
+            <select class="form-input" id="messagesFilter" style="width:auto;padding:0.4rem 0.8rem;font-size:0.85rem">
+              <option value="all">الكل</option>
+              <option value="new">جديد</option>
+              <option value="read">مقروء</option>
+              <option value="replied">تم الرد</option>
+            </select>
+            <button class="btn btn--sm" id="refreshMessagesBtn">🔄 تحديث</button>
+          </div>
+        </div>
+        <div class="items-list" id="messagesList"></div>
       </div>
 
       <!-- ===== SETTINGS PANEL ===== -->
@@ -860,6 +1089,18 @@
             <input class="form-input" id="settingsWhatsappMsg" value="مرحباً 👋 حابب أتكلم عن مشروع جديد" placeholder="رسالة ترحيبية...">
           </div>
           <button class="btn" id="saveSettingsBtn">💾 حفظ الإعدادات</button>
+        </div>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;max-width:500px;margin-top:1.5rem">
+          <h3 style="margin-bottom:1rem;font-size:1rem;color:var(--text-primary)">📦 تصدير / استيراد البيانات</h3>
+          <div class="data-actions">
+            <button class="btn btn--sm" id="exportAllBtn">📤 تصدير الكل (JSON)</button>
+            <label class="btn btn--sm btn--success" style="cursor:pointer">
+              📥 استيراد بيانات
+              <input type="file" class="import-input" id="importFileInput" accept=".json">
+            </label>
+          </div>
+          <p class="shortcut-hint" style="margin-top:0.75rem">⌨️ الاختصارات: <span class="kbd">Ctrl+S</span> حفظ &nbsp; <span class="kbd">Ctrl+N</span> إضافة جديد &nbsp; <span class="kbd">Escape</span> إغلاق</p>
         </div>
       </div>
     </main>
@@ -897,12 +1138,9 @@
 
   <script>
     /* ========================================================
-       Xfuse Dashboard — Client-Side Application
+       Xfuse Dashboard — Client-Side Application (Enhanced)
        ======================================================== */
 
-    // Since this is an admin page served locally or from /admin/,
-    // we need the API base URL. In development it uses relative paths,
-    // in production it's the same origin.
     const API_BASE = '';
     const DATA_BASE = '/data';
 
@@ -913,19 +1151,39 @@
       testimonials: { items: [] },
       team: { members: [] },
       portfolio: { projects: [] },
-      offers: { offers: [], whatsappNumber: '201029010778' },
+      offers: { offers: [], whatsappNumber: '201029010778', whatsappMessage: '' },
+      messages: { messages: [] },
     };
     let editingItem = null;
     let editingType = null;
     let confirmCallback = null;
+    let searchFilters = { testimonials: '', team: '', portfolio: '', offers: '' };
+    let tokenCheckInterval = null;
+    let formDirty = false;
+    let formSnapshot = '';
+
+    // ==================== GLOBAL ERROR HANDLER ====================
+    window.onerror = function(msg, url, line) {
+      console.error('Global error:', msg, url, line);
+      showErrorBanner('حدث خطأ غير متوقع. حاول تحديث الصفحة.');
+      return true;
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('Unhandled rejection:', e.reason);
+    });
 
     // ==================== INIT ====================
     document.addEventListener('DOMContentLoaded', init);
 
     async function init() {
       if (authToken) {
-        await loadAllData();
-        showDashboard();
+        const loaded = await loadAllData();
+        if (loaded) {
+          showDashboard();
+          startTokenCheck();
+        } else {
+          showLogin();
+        }
       } else {
         showLogin();
       }
@@ -935,20 +1193,40 @@
 
     function hideLoading() {
       const el = document.getElementById('loadingOverlay');
+      if (!el) return;
       el.classList.add('hide');
       setTimeout(() => el.remove(), 300);
+    }
+
+    // ==================== ERROR BANNER ====================
+    function showErrorBanner(message) {
+      const container = document.getElementById('errorBanner');
+      if (!container) return;
+      container.innerHTML = `
+        <div class="error-banner">
+          <span class="error-banner__icon">⚠️</span>
+          <span class="error-banner__text">${esc(message)}</span>
+          <button class="error-banner__close" onclick="this.parentElement.remove()">✕</button>
+        </div>`;
+    }
+
+    function clearErrorBanner() {
+      const container = document.getElementById('errorBanner');
+      if (container) container.innerHTML = '';
     }
 
     // ==================== AUTH ====================
     function showLogin() {
       document.getElementById('loginPage').style.display = 'flex';
       document.getElementById('dashboard').classList.remove('active');
+      stopTokenCheck();
     }
 
     function showDashboard() {
       document.getElementById('loginPage').style.display = 'none';
       document.getElementById('dashboard').classList.add('active');
       renderAll();
+      loadSettingsFields();
     }
 
     async function handleLogin(e) {
@@ -980,6 +1258,7 @@
           sessionStorage.setItem('xfuse_token', authToken);
           await loadAllData();
           showDashboard();
+          startTokenCheck();
           toast('تم تسجيل الدخول بنجاح ✓', 'success');
         } else {
           errorEl.textContent = 'كلمة السر غلط';
@@ -995,43 +1274,86 @@
     function logout() {
       authToken = null;
       sessionStorage.removeItem('xfuse_token');
+      stopTokenCheck();
       showLogin();
+    }
+
+    // ==================== TOKEN EXPIRY CHECK ====================
+    function startTokenCheck() {
+      stopTokenCheck();
+      tokenCheckInterval = setInterval(checkTokenExpiry, 5 * 60 * 1000); // every 5 min
+    }
+
+    function stopTokenCheck() {
+      if (tokenCheckInterval) {
+        clearInterval(tokenCheckInterval);
+        tokenCheckInterval = null;
+      }
+    }
+
+    function checkTokenExpiry() {
+      if (!authToken) return;
+      try {
+        const payload = JSON.parse(atob(authToken.split('.')[1]));
+        const exp = payload.exp * 1000;
+        const now = Date.now();
+        if (now >= exp) {
+          toast('انتهت صلاحية الجلسة — سجل دخول تاني', 'error');
+          logout();
+        } else if (exp - now < 10 * 60 * 1000) {
+          toast('⚠️ الجلسة هتنتهي خلال 10 دقايق', 'error');
+        }
+      } catch { /* invalid token format */ }
     }
 
     // ==================== DATA LOADING ====================
     async function loadAllData() {
       try {
-        const [t, m, p, o] = await Promise.all([
-          fetchJSON(DATA_BASE + '/testimonials.json'),
-          fetchJSON(DATA_BASE + '/team.json'),
-          fetchJSON(DATA_BASE + '/portfolio.json'),
-          fetchJSON(DATA_BASE + '/offers.json'),
+        const fetchOpts = authToken ? { headers: { 'Authorization': `Bearer ${authToken}` } } : {};
+        const [t, m, p, o, msg] = await Promise.all([
+          fetchJSON(API_BASE + '/api/content?type=testimonials'),
+          fetchJSON(API_BASE + '/api/content?type=team'),
+          fetchJSON(API_BASE + '/api/content?type=portfolio'),
+          fetchJSON(API_BASE + '/api/content?type=offers'),
+          authToken ? fetchJSON(API_BASE + '/api/content?type=contact_submissions', 2, fetchOpts) : Promise.resolve(null),
         ]);
 
         if (t) data.testimonials = t;
         if (m) data.team = m;
         if (p) data.portfolio = p;
         if (o) data.offers = o;
+        if (msg) data.messages = msg;
 
-        // Sort by order
         data.testimonials.items.sort((a, b) => a.order - b.order);
         data.team.members.sort((a, b) => a.order - b.order);
         data.portfolio.projects.sort((a, b) => a.order - b.order);
         if (data.offers.offers) data.offers.offers.sort((a, b) => a.order - b.order);
 
+        clearErrorBanner();
+        return true;
       } catch (err) {
         console.error('Error loading data:', err);
+        showErrorBanner('فشل تحميل البيانات من السيرفر. تأكد من اتصالك بالإنترنت وحاول تاني.');
+        return false;
       }
     }
 
-    async function fetchJSON(url) {
-      const res = await fetch(url);
-      if (!res.ok) return null;
-      return res.json();
+    async function fetchJSON(url, retries = 2, opts = {}) {
+      for (let i = 0; i <= retries; i++) {
+        try {
+          const res = await fetch(url, opts);
+          if (!res.ok) return null;
+          return await res.json();
+        } catch (err) {
+          if (i === retries) throw err;
+          await new Promise(r => setTimeout(r, 1000 * (i + 1)));
+        }
+      }
+      return null;
     }
 
     async function saveData(type, method, body, id) {
-      let url = API_BASE + `/api/content?type=${type}`;
+      let url = API_BASE + `/api/content?type=${encodeURIComponent(type)}`;
       if (id) url += `&id=${encodeURIComponent(id)}`;
 
       const res = await fetch(url, {
@@ -1049,6 +1371,11 @@
         return null;
       }
 
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || 'Request failed');
+      }
+
       return res.json();
     }
 
@@ -1059,6 +1386,7 @@
       renderTeam();
       renderPortfolio();
       renderOffers();
+      renderMessages();
     }
 
     function updateCounts() {
@@ -1066,26 +1394,68 @@
       const mc = data.team.members.length;
       const pc = data.portfolio.projects.length;
       const oc = (data.offers.offers || []).length;
+      const msgc = (data.messages.messages || []).length;
 
       document.getElementById('countTestimonials').textContent = tc;
       document.getElementById('countTeam').textContent = mc;
       document.getElementById('countPortfolio').textContent = pc;
       document.getElementById('countOffers').textContent = oc;
+      document.getElementById('countMessages').textContent = msgc;
       document.getElementById('overviewTestimonials').textContent = tc;
       document.getElementById('overviewTeam').textContent = mc;
       document.getElementById('overviewPortfolio').textContent = pc;
       document.getElementById('overviewOffers').textContent = oc;
+      document.getElementById('overviewMessages').textContent = msgc;
+    }
+
+    function getListKey(type) {
+      if (type === 'team') return 'members';
+      if (type === 'portfolio') return 'projects';
+      if (type === 'offers') return 'offers';
+      return 'items';
+    }
+
+    // ==================== SEARCH / FILTER ====================
+    function filterItems(items, query, fields) {
+      if (!query) return items;
+      const q = query.toLowerCase();
+      return items.filter(item => fields.some(f => (item[f] || '').toLowerCase().includes(q)));
+    }
+
+    // ==================== CONTENT WARNINGS ====================
+    function getWarnings(item, type) {
+      const warnings = [];
+      if (type === 'testimonials') {
+        if (!item.quoteEn) warnings.push('بدون ترجمة إنجليزية');
+        if (!item.nameEn) warnings.push('الاسم بالإنجليزي ناقص');
+      } else if (type === 'team') {
+        if (!item.image) warnings.push('بدون صورة');
+        if (!item.linkedin && !item.github) warnings.push('بدون Social Links');
+        if (!item.nameEn) warnings.push('الاسم بالإنجليزي ناقص');
+      } else if (type === 'portfolio') {
+        if (!item.descriptionAr) warnings.push('بدون وصف');
+        if (!item.titleEn) warnings.push('بدون عنوان إنجليزي');
+        if (!item.image) warnings.push('بدون صورة');
+      }
+      return warnings;
+    }
+
+    function renderWarningBadges(item, type) {
+      const warnings = getWarnings(item, type);
+      if (!warnings.length) return '';
+      return warnings.map(w => `<span class="content-warning" title="${esc(w)}">⚠️ ${esc(w)}</span>`).join('');
     }
 
     // ---------- Testimonials ----------
     function renderTestimonials() {
       const list = document.getElementById('testimonialsList');
-      const items = data.testimonials.items;
+      let items = data.testimonials.items;
+      items = filterItems(items, searchFilters.testimonials, ['nameAr', 'nameEn', 'quoteAr', 'positionAr']);
 
       if (!items.length) {
         list.innerHTML = `<div class="empty-state">
           <div class="empty-state__icon">💬</div>
-          <p class="empty-state__text">مفيش شهادات عملاء لسه. اضغط "إضافة شهادة" عشان تبدأ.</p>
+          <p class="empty-state__text">${searchFilters.testimonials ? 'مفيش نتائج مطابقة للبحث' : 'مفيش شهادات عملاء لسه. اضغط "إضافة شهادة" عشان تبدأ.'}</p>
         </div>`;
         return;
       }
@@ -1096,11 +1466,11 @@
           <div class="item-card__avatar">${esc(item.initials)}</div>
           <div class="item-card__content">
             <div class="item-card__name">${esc(item.nameAr)} — ${esc(item.nameEn)}</div>
-            <div class="item-card__sub">${esc(item.positionAr)} | ${'⭐'.repeat(item.rating)}</div>
+            <div class="item-card__sub">${esc(item.positionAr)} | ${'⭐'.repeat(item.rating)} ${renderWarningBadges(item, 'testimonials')}</div>
           </div>
           <div class="item-card__actions">
-            <button class="item-card__btn" onclick="editTestimonial('${esc(item.id)}')">✏️</button>
-            <button class="item-card__btn item-card__btn--delete" onclick="deleteItem('testimonials','${esc(item.id)}','${esc(item.nameAr)}')">🗑️</button>
+            <button class="item-card__btn" data-action="edit" data-type="testimonials" data-id="${esc(item.id)}">✏️</button>
+            <button class="item-card__btn item-card__btn--delete" data-action="delete" data-type="testimonials" data-id="${esc(item.id)}" data-name="${esc(item.nameAr)}">🗑️</button>
           </div>
         </div>
       `).join('');
@@ -1111,12 +1481,13 @@
     // ---------- Team ----------
     function renderTeam() {
       const list = document.getElementById('teamList');
-      const items = data.team.members;
+      let items = data.team.members;
+      items = filterItems(items, searchFilters.team, ['nameAr', 'nameEn', 'roleAr']);
 
       if (!items.length) {
         list.innerHTML = `<div class="empty-state">
           <div class="empty-state__icon">👥</div>
-          <p class="empty-state__text">مفيش أعضاء فريق لسه. اضغط "إضافة عضو" عشان تبدأ.</p>
+          <p class="empty-state__text">${searchFilters.team ? 'مفيش نتائج مطابقة للبحث' : 'مفيش أعضاء فريق لسه. اضغط "إضافة عضو" عشان تبدأ.'}</p>
         </div>`;
         return;
       }
@@ -1127,11 +1498,11 @@
           <div class="item-card__avatar">${esc(item.initials)}</div>
           <div class="item-card__content">
             <div class="item-card__name">${esc(item.nameAr)} — ${esc(item.nameEn)}</div>
-            <div class="item-card__sub">${esc(item.roleAr)}</div>
+            <div class="item-card__sub">${esc(item.roleAr)} ${renderWarningBadges(item, 'team')}</div>
           </div>
           <div class="item-card__actions">
-            <button class="item-card__btn" onclick="editTeamMember('${esc(item.id)}')">✏️</button>
-            <button class="item-card__btn item-card__btn--delete" onclick="deleteItem('team','${esc(item.id)}','${esc(item.nameAr)}')">🗑️</button>
+            <button class="item-card__btn" data-action="edit" data-type="team" data-id="${esc(item.id)}">✏️</button>
+            <button class="item-card__btn item-card__btn--delete" data-action="delete" data-type="team" data-id="${esc(item.id)}" data-name="${esc(item.nameAr)}">🗑️</button>
           </div>
         </div>
       `).join('');
@@ -1142,12 +1513,13 @@
     // ---------- Portfolio ----------
     function renderPortfolio() {
       const list = document.getElementById('portfolioList');
-      const items = data.portfolio.projects;
+      let items = data.portfolio.projects;
+      items = filterItems(items, searchFilters.portfolio, ['titleAr', 'titleEn', 'tagAr']);
 
       if (!items.length) {
         list.innerHTML = `<div class="empty-state">
           <div class="empty-state__icon">🎨</div>
-          <p class="empty-state__text">مفيش مشاريع لسه. اضغط "إضافة مشروع" عشان تبدأ.</p>
+          <p class="empty-state__text">${searchFilters.portfolio ? 'مفيش نتائج مطابقة للبحث' : 'مفيش مشاريع لسه. اضغط "إضافة مشروع" عشان تبدأ.'}</p>
         </div>`;
         return;
       }
@@ -1160,16 +1532,157 @@
               ${item.featured ? '<span class="item-card__badge">⭐ مميز</span> ' : ''}
               ${esc(item.titleAr)}
             </div>
-            <div class="item-card__sub">${esc(item.tagAr)} — ${esc(item.titleEn)}</div>
+            <div class="item-card__sub">${esc(item.tagAr)} — ${esc(item.titleEn)} ${renderWarningBadges(item, 'portfolio')}</div>
           </div>
           <div class="item-card__actions">
-            <button class="item-card__btn" onclick="editProject('${esc(item.id)}')">✏️</button>
-            <button class="item-card__btn item-card__btn--delete" onclick="deleteItem('portfolio','${esc(item.id)}','${esc(item.titleAr)}')">🗑️</button>
+            <button class="item-card__btn" data-action="edit" data-type="portfolio" data-id="${esc(item.id)}">✏️</button>
+            <button class="item-card__btn item-card__btn--delete" data-action="delete" data-type="portfolio" data-id="${esc(item.id)}" data-name="${esc(item.titleAr)}">🗑️</button>
           </div>
         </div>
       `).join('');
 
       initDragDrop(list, 'portfolio');
+    }
+
+    // ---------- Offers ----------
+    function renderOffers() {
+      const list = document.getElementById('offersList');
+      let items = data.offers.offers || [];
+      items = filterItems(items, searchFilters.offers, ['titleAr', 'titleEn', 'priceAr']);
+
+      if (!items.length) {
+        list.innerHTML = `<div class="empty-state">
+          <div class="empty-state__icon">🌟</div>
+          <p class="empty-state__text">${searchFilters.offers ? 'مفيش نتائج مطابقة للبحث' : 'مفيش عروض لسه. اضغط "إضافة عرض" عشان تبدأ.'}</p>
+        </div>`;
+        return;
+      }
+
+      list.innerHTML = items.map((item, i) => `
+        <div class="item-card" draggable="true" data-id="${esc(item.id)}" data-type="offers" data-index="${i}">
+          <span class="item-card__drag" title="اسحب لتغيير الترتيب">⠿</span>
+          <div class="item-card__avatar">${esc(item.icon || '🌟')}</div>
+          <div class="item-card__content">
+            <div class="item-card__name">
+              ${item.popular ? '<span class="item-card__badge">🔥 الأكثر طلباً</span> ' : ''}
+              ${esc(item.titleAr)}
+            </div>
+            <div class="item-card__sub">${esc(item.priceAr)} — ${esc(item.titleEn)}</div>
+          </div>
+          <div class="item-card__actions">
+            <button class="item-card__btn" data-action="edit" data-type="offers" data-id="${esc(item.id)}">✏️</button>
+            <button class="item-card__btn item-card__btn--delete" data-action="delete" data-type="offers" data-id="${esc(item.id)}" data-name="${esc(item.titleAr)}">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+
+      initDragDrop(list, 'offers');
+    }
+
+    // ==================== MESSAGES ====================
+    function renderMessages() {
+      const list = document.getElementById('messagesList');
+      if (!list) return;
+      const filter = document.getElementById('messagesFilter')?.value || 'all';
+      let items = data.messages.messages || [];
+      if (filter !== 'all') items = items.filter(m => m.status === filter);
+
+      if (!items.length) {
+        list.innerHTML = `<div class="empty-state">
+          <div class="empty-state__icon">📧</div>
+          <p class="empty-state__text">${filter !== 'all' ? 'مفيش رسائل بالحالة دي' : 'مفيش رسائل لسه.'}</p>
+        </div>`;
+        return;
+      }
+
+      list.innerHTML = items.map(msg => {
+        const statusLabels = { 'new': '🔵 جديد', 'read': '👁️ مقروء', 'replied': '✅ تم الرد' };
+        const statusClass = msg.status === 'new' ? 'color:#3b82f6;font-weight:bold' : msg.status === 'replied' ? 'color:#10b981' : 'color:var(--text-muted)';
+        const date = msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+        return `
+        <div class="item-card" style="cursor:pointer" data-msg-id="${esc(String(msg.id))}">
+          <div class="item-card__avatar" style="font-size:1.2rem">${msg.status === 'new' ? '🔵' : msg.status === 'replied' ? '✅' : '👁️'}</div>
+          <div class="item-card__content" onclick="viewMessage('${esc(String(msg.id))}')">
+            <div class="item-card__name">${esc(msg.name)} <span style="font-size:0.75rem;${statusClass}">${statusLabels[msg.status] || msg.status}</span></div>
+            <div class="item-card__sub">${esc(msg.email)} • ${date}</div>
+            <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.25rem;max-width:500px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(msg.message?.substring(0, 100) || '')}</div>
+          </div>
+          <div class="item-card__actions">
+            <button class="item-card__btn" onclick="updateMessageStatus('${esc(String(msg.id))}', 'read')" title="تعليم كمقروء">👁️</button>
+            <button class="item-card__btn" onclick="updateMessageStatus('${esc(String(msg.id))}', 'replied')" title="تعليم كتم الرد">✅</button>
+            <button class="item-card__btn item-card__btn--delete" onclick="deleteMessage('${esc(String(msg.id))}', '${esc(msg.name)}')" title="حذف">🗑️</button>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function viewMessage(id) {
+      const msg = (data.messages.messages || []).find(m => String(m.id) === String(id));
+      if (!msg) return;
+      const date = msg.createdAt ? new Date(msg.createdAt).toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
+      openModal('📧 رسالة من ' + esc(msg.name), `
+        <div style="margin-bottom:1rem">
+          <div class="form-label">👤 الاسم</div>
+          <div style="padding:0.5rem;background:var(--bg-elevated);border-radius:var(--radius-sm)">${esc(msg.name)}</div>
+        </div>
+        <div style="margin-bottom:1rem">
+          <div class="form-label">📧 البريد</div>
+          <div style="padding:0.5rem;background:var(--bg-elevated);border-radius:var(--radius-sm)"><a href="mailto:${esc(msg.email)}" style="color:var(--accent)">${esc(msg.email)}</a></div>
+        </div>
+        ${msg.company ? `<div style="margin-bottom:1rem"><div class="form-label">🏢 الشركة</div><div style="padding:0.5rem;background:var(--bg-elevated);border-radius:var(--radius-sm)">${esc(msg.company)}</div></div>` : ''}
+        <div style="margin-bottom:1rem">
+          <div class="form-label">📅 التاريخ</div>
+          <div style="padding:0.5rem;background:var(--bg-elevated);border-radius:var(--radius-sm)">${date}</div>
+        </div>
+        <div>
+          <div class="form-label">💬 الرسالة</div>
+          <div style="padding:0.75rem;background:var(--bg-elevated);border-radius:var(--radius-sm);white-space:pre-wrap;line-height:1.6">${esc(msg.message)}</div>
+        </div>
+      `, null);
+      // Hide save button for view-only
+      const saveBtn = document.getElementById('modalSave');
+      if (saveBtn) saveBtn.style.display = 'none';
+      // Mark as read
+      if (msg.status === 'new') updateMessageStatus(id, 'read');
+    }
+
+    async function updateMessageStatus(id, status) {
+      try {
+        await saveData('contact_submissions', 'PUT', { status }, id);
+        const msg = (data.messages.messages || []).find(m => String(m.id) === String(id));
+        if (msg) msg.status = status;
+        renderMessages();
+        updateCounts();
+      } catch (err) {
+        toast('فشل تحديث حالة الرسالة: ' + err.message, 'error');
+      }
+    }
+
+    async function deleteMessage(id, name) {
+      showConfirm(`هل تريد حذف رسالة "${name}"؟`, async () => {
+        try {
+          await saveData('contact_submissions', 'DELETE', null, id);
+          data.messages.messages = (data.messages.messages || []).filter(m => String(m.id) !== String(id));
+          renderMessages();
+          updateCounts();
+          toast('تم حذف الرسالة ✓', 'success');
+        } catch (err) {
+          toast('فشل الحذف: ' + err.message, 'error');
+        }
+      });
+    }
+
+    async function refreshMessages() {
+      try {
+        const fetchOpts = { headers: { 'Authorization': `Bearer ${authToken}` } };
+        const msg = await fetchJSON(API_BASE + '/api/content?type=contact_submissions', 2, fetchOpts);
+        if (msg) data.messages = msg;
+        renderMessages();
+        updateCounts();
+        toast('تم تحديث الرسائل ✓', 'success');
+      } catch (err) {
+        toast('فشل تحديث الرسائل', 'error');
+      }
     }
 
     // ==================== MODALS ====================
@@ -1178,20 +1691,102 @@
       document.getElementById('modalBody').innerHTML = bodyHTML;
       document.getElementById('modalOverlay').classList.add('active');
 
+      // Init image previews
+      initImagePreviews();
+
+      // Track dirty state
+      formDirty = false;
+      setTimeout(() => {
+        formSnapshot = getFormSnapshot();
+        document.querySelectorAll('#modalBody input, #modalBody textarea').forEach(el => {
+          el.addEventListener('input', markFormDirty);
+        });
+      }, 50);
+
       const saveBtn = document.getElementById('modalSave');
-      saveBtn.onclick = async () => {
+      saveBtn.style.display = onSave ? '' : 'none';
+      if (onSave) {
+        saveBtn.onclick = async () => {
         saveBtn.disabled = true;
         saveBtn.innerHTML = '<span class="spinner"></span> جاري الحفظ...';
         await onSave();
+        formDirty = false;
         saveBtn.disabled = false;
         saveBtn.innerHTML = '💾 حفظ';
-      };
+        };
+      }
     }
 
-    function closeModal() {
+    function closeModal(force) {
+      if (!force && formDirty) {
+        showConfirm('فيه تغييرات مش محفوظة. متأكد إنك عايز تقفل؟', () => {
+          formDirty = false;
+          closeModal(true);
+        });
+        return;
+      }
       document.getElementById('modalOverlay').classList.remove('active');
       editingItem = null;
       editingType = null;
+      formDirty = false;
+    }
+
+    function getFormSnapshot() {
+      const inputs = document.querySelectorAll('#modalBody input, #modalBody textarea');
+      return Array.from(inputs).map(el => el.value).join('|||');
+    }
+
+    function markFormDirty() {
+      const current = getFormSnapshot();
+      formDirty = current !== formSnapshot;
+    }
+
+    // ==================== IMAGE PREVIEW ====================
+    function initImagePreviews() {
+      const imageInput = document.getElementById('f_image');
+      if (!imageInput) return;
+      const previewId = 'f_image_preview';
+      let preview = document.getElementById(previewId);
+      if (!preview) {
+        preview = document.createElement('div');
+        preview.id = previewId;
+        preview.className = 'image-preview';
+        imageInput.parentElement.appendChild(preview);
+      }
+      function updatePreview() {
+        const path = imageInput.value.trim();
+        if (!path || path === '#') {
+          preview.classList.remove('visible');
+          preview.innerHTML = '';
+          return;
+        }
+        preview.classList.add('visible');
+        preview.innerHTML = `<img src="${esc(path)}" alt="Preview" onerror="this.parentElement.innerHTML='<div class=\\'image-preview__error\\'>❌ الصورة مش موجودة</div>'">`;
+      }
+      imageInput.addEventListener('input', updatePreview);
+      if (imageInput.value) updatePreview();
+    }
+
+    // ==================== FORM VALIDATION ====================
+    function validateRequired(fields) {
+      let valid = true;
+      fields.forEach(({ id, label }) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (!el.value.trim()) {
+          el.classList.add('invalid');
+          valid = false;
+        } else {
+          el.classList.remove('invalid');
+        }
+      });
+      return valid;
+    }
+
+    function clearValidation() {
+      document.querySelectorAll('.form-input.invalid, .form-textarea.invalid').forEach(el => {
+        el.classList.remove('invalid');
+      });
     }
 
     // ---------- Testimonial Form ----------
@@ -1200,7 +1795,7 @@
       return `
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">الاسم <span class="form-label__lang">AR</span></label>
+            <label class="form-label"><span class="required">*</span> الاسم <span class="form-label__lang">AR</span></label>
             <input class="form-input" id="f_nameAr" value="${esc(d.nameAr || '')}" placeholder="محمد حسن">
           </div>
           <div class="form-group">
@@ -1223,7 +1818,7 @@
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">الشهادة <span class="form-label__lang">AR</span></label>
+          <label class="form-label"><span class="required">*</span> الشهادة <span class="form-label__lang">AR</span></label>
           <textarea class="form-textarea" id="f_quoteAr" placeholder="اكتب رأي العميل بالعربي...">${esc(d.quoteAr || '')}</textarea>
         </div>
         <div class="form-group">
@@ -1256,6 +1851,14 @@
     }
 
     async function saveTestimonial() {
+      if (!validateRequired([
+        { id: 'f_nameAr', label: 'الاسم' },
+        { id: 'f_quoteAr', label: 'الشهادة' }
+      ])) {
+        toast('الحقول المطلوبة (*) لازم تتملأ', 'error');
+        return;
+      }
+
       const itemData = {
         nameAr: val('f_nameAr'),
         nameEn: val('f_nameEn'),
@@ -1266,11 +1869,6 @@
         quoteEn: val('f_quoteEn'),
         rating: document.querySelectorAll('#f_stars .form-star.active').length || 5,
       };
-
-      if (!itemData.nameAr || !itemData.quoteAr) {
-        toast('الاسم والشهادة بالعربي مطلوبين', 'error');
-        return;
-      }
 
       if (!itemData.initials) {
         itemData.initials = (itemData.nameEn || itemData.nameAr).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -1308,7 +1906,7 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">الاسم <span class="form-label__lang">AR</span></label>
+            <label class="form-label"><span class="required">*</span> الاسم <span class="form-label__lang">AR</span></label>
             <input class="form-input" id="f_nameAr" value="${esc(d.nameAr || '')}" placeholder="أحمد الخرفي">
           </div>
           <div class="form-group">
@@ -1318,7 +1916,7 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">المنصب <span class="form-label__lang">AR</span></label>
+            <label class="form-label"><span class="required">*</span> المنصب <span class="form-label__lang">AR</span></label>
             <input class="form-input" id="f_roleAr" value="${esc(d.roleAr || '')}" placeholder="المدير التنفيذي والمطور الرئيسي">
           </div>
           <div class="form-group">
@@ -1368,6 +1966,14 @@
     }
 
     async function saveTeamMember() {
+      if (!validateRequired([
+        { id: 'f_nameAr', label: 'الاسم' },
+        { id: 'f_roleAr', label: 'المنصب' }
+      ])) {
+        toast('الحقول المطلوبة (*) لازم تتملأ', 'error');
+        return;
+      }
+
       const itemData = {
         initials: val('f_initials'),
         nameAr: val('f_nameAr'),
@@ -1381,16 +1987,10 @@
         image: val('f_image'),
       };
 
-      if (!itemData.nameAr || !itemData.roleAr) {
-        toast('الاسم والمنصب بالعربي مطلوبين', 'error');
-        return;
-      }
-
       if (!itemData.initials) {
         itemData.initials = (itemData.nameEn || itemData.nameAr).split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
       }
 
-      // Generate a safe id
       if (!editingItem) {
         itemData.id = itemData.initials.toLowerCase();
       }
@@ -1423,7 +2023,7 @@
       return `
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">العنوان <span class="form-label__lang">AR</span></label>
+            <label class="form-label"><span class="required">*</span> العنوان <span class="form-label__lang">AR</span></label>
             <input class="form-input" id="f_titleAr" value="${esc(d.titleAr || '')}" placeholder="محلك — توصيل فوري">
           </div>
           <div class="form-group">
@@ -1483,6 +2083,11 @@
     }
 
     async function saveProject() {
+      if (!validateRequired([{ id: 'f_titleAr', label: 'العنوان' }])) {
+        toast('الحقول المطلوبة (*) لازم تتملأ', 'error');
+        return;
+      }
+
       const itemData = {
         titleAr: val('f_titleAr'),
         titleEn: val('f_titleEn'),
@@ -1494,11 +2099,6 @@
         link: val('f_link') || '#',
         featured: document.getElementById('f_featured')?.checked || false,
       };
-
-      if (!itemData.titleAr) {
-        toast('عنوان المشروع بالعربي مطلوب', 'error');
-        return;
-      }
 
       try {
         if (editingItem) {
@@ -1522,19 +2122,151 @@
       }
     }
 
+    // ---------- Offer Form ----------
+    function getOfferFormHTML(item) {
+      const d = item || {};
+      return `
+        <div class="form-group">
+          <label class="form-label">🎨 الأيقونة (إيموجي)</label>
+          <input class="form-input" id="f_icon" value="${esc(d.icon || '')}" placeholder="🛒" style="width:80px;text-align:center" dir="ltr">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span class="required">*</span> العنوان <span class="form-label__lang">AR</span></label>
+            <input class="form-input" id="f_titleAr" value="${esc(d.titleAr || '')}" placeholder="متجر إلكتروني">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Title <span class="form-label__lang">EN</span></label>
+            <input class="form-input" id="f_titleEn" value="${esc(d.titleEn || '')}" placeholder="E-commerce Store" dir="ltr">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">الوصف <span class="form-label__lang">AR</span></label>
+          <textarea class="form-textarea" id="f_descAr" placeholder="وصف العرض بالعربي...">${esc(d.descriptionAr || '')}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Description <span class="form-label__lang">EN</span></label>
+          <textarea class="form-textarea" id="f_descEn" placeholder="Offer description in English..." dir="ltr">${esc(d.descriptionEn || '')}</textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label"><span class="required">*</span> السعر <span class="form-label__lang">AR</span></label>
+            <input class="form-input" id="f_priceAr" value="${esc(d.priceAr || '')}" placeholder="2,000 جنيه">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Price <span class="form-label__lang">EN</span></label>
+            <input class="form-input" id="f_priceEn" value="${esc(d.priceEn || '')}" placeholder="2,000 EGP" dir="ltr">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">شارة <span class="form-label__lang">AR</span></label>
+            <input class="form-input" id="f_badgeAr" value="${esc(d.badgeAr || '')}" placeholder="أفضل قيمة">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Badge <span class="form-label__lang">EN</span></label>
+            <input class="form-input" id="f_badgeEn" value="${esc(d.badgeEn || '')}" placeholder="Best Value" dir="ltr">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">المميزات <span class="form-label__lang">AR</span> (سطر لكل ميزة)</label>
+          <textarea class="form-textarea" id="f_featuresAr" placeholder="دومين خاص\nتصميم متجاوب\nنموذج تواصل">${(d.featuresAr || []).join('\n')}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Features <span class="form-label__lang">EN</span> (one per line)</label>
+          <textarea class="form-textarea" id="f_featuresEn" placeholder="Custom domain\nResponsive design\nContact form" dir="ltr">${(d.featuresEn || []).join('\n')}</textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-check">
+            <input type="checkbox" id="f_popular" ${d.popular ? 'checked' : ''}>
+            <span>🔥 الأكثر طلباً (يظهر بتمييز خاص)</span>
+          </label>
+        </div>
+      `;
+    }
+
+    function addOffer() {
+      editingItem = null;
+      editingType = 'offers';
+      openModal('إضافة عرض خاص', getOfferFormHTML(), saveOffer);
+    }
+
+    function editOffer(id) {
+      const item = (data.offers.offers || []).find(i => i.id === id);
+      if (!item) return;
+      editingItem = item;
+      editingType = 'offers';
+      openModal('تعديل عرض — ' + item.titleAr, getOfferFormHTML(item), saveOffer);
+    }
+
+    async function saveOffer() {
+      if (!validateRequired([
+        { id: 'f_titleAr', label: 'العنوان' },
+        { id: 'f_priceAr', label: 'السعر' }
+      ])) {
+        toast('الحقول المطلوبة (*) لازم تتملأ', 'error');
+        return;
+      }
+
+      const itemData = {
+        icon: val('f_icon') || '🌟',
+        titleAr: val('f_titleAr'),
+        titleEn: val('f_titleEn'),
+        descriptionAr: val('f_descAr'),
+        descriptionEn: val('f_descEn'),
+        priceAr: val('f_priceAr'),
+        priceEn: val('f_priceEn'),
+        badgeAr: val('f_badgeAr'),
+        badgeEn: val('f_badgeEn'),
+        featuresAr: val('f_featuresAr').split('\n').filter(Boolean),
+        featuresEn: val('f_featuresEn').split('\n').filter(Boolean),
+        popular: document.getElementById('f_popular')?.checked || false,
+      };
+
+      try {
+        if (editingItem) {
+          const result = await saveData('offers', 'PUT', itemData, editingItem.id);
+          if (result && result.item) {
+            const idx = (data.offers.offers || []).findIndex(i => i.id === editingItem.id);
+            if (idx > -1) data.offers.offers[idx] = { ...data.offers.offers[idx], ...result.item };
+            toast('تم تعديل العرض ✓', 'success');
+          }
+        } else {
+          const result = await saveData('offers', 'POST', itemData);
+          if (result && result.item) {
+            if (!data.offers.offers) data.offers.offers = [];
+            data.offers.offers.push(result.item);
+            toast('تم إضافة العرض ✓', 'success');
+          }
+        }
+        renderAll();
+        closeModal();
+      } catch {
+        toast('حدث خطأ — حاول تاني', 'error');
+      }
+    }
+
     // ==================== DELETE ====================
     function deleteItem(type, id, name) {
       showConfirm(`هل أنت متأكد من حذف "${name}"؟`, async () => {
         try {
+          // Animate removal
+          const card = document.querySelector(`.item-card[data-id="${CSS.escape(id)}"]`);
+          if (card) {
+            card.classList.add('removing');
+            await new Promise(r => setTimeout(r, 300));
+          }
+
           const result = await saveData(type, 'DELETE', {}, id);
           if (result) {
-            const listKey = type === 'testimonials' ? 'items' : type === 'team' ? 'members' : type === 'offers' ? 'offers' : 'projects';
+            const listKey = getListKey(type);
             data[type][listKey] = data[type][listKey].filter(i => i.id !== id);
             toast('تم الحذف ✓', 'success');
             renderAll();
           }
         } catch {
           toast('خطأ في الحذف', 'error');
+          renderAll(); // re-render to restore removed card
         }
       });
     }
@@ -1575,7 +2307,7 @@
 
           if (!draggedEl || draggedEl === card) return;
 
-          const listKey = type === 'testimonials' ? 'items' : type === 'team' ? 'members' : type === 'offers' ? 'offers' : 'projects';
+          const listKey = getListKey(type);
           const items = data[type][listKey];
           const fromId = draggedEl.dataset.id;
           const toId = card.dataset.id;
@@ -1584,14 +2316,12 @@
 
           if (fromIdx < 0 || toIdx < 0) return;
 
-          // Reorder
           const [moved] = items.splice(fromIdx, 1);
           items.splice(toIdx, 0, moved);
           items.forEach((item, i) => { item.order = i + 1; });
 
           renderAll();
 
-          // Save order to API
           try {
             await saveData(type, 'PUT', { order: items.map(i => i.id) });
             toast('تم تحديث الترتيب ✓', 'success');
@@ -1600,6 +2330,49 @@
           }
         });
       });
+    }
+
+    // ==================== SETTINGS ====================
+    function loadSettingsFields() {
+      if (data.offers.whatsappNumber) {
+        document.getElementById('settingsWhatsapp').value = data.offers.whatsappNumber;
+      }
+      if (data.offers.whatsappMessage) {
+        document.getElementById('settingsWhatsappMsg').value = data.offers.whatsappMessage;
+      }
+    }
+
+    async function saveSettings() {
+      const btn = document.getElementById('saveSettingsBtn');
+      const whatsapp = val('settingsWhatsapp');
+      const msg = val('settingsWhatsappMsg');
+
+      if (!whatsapp) {
+        toast('رقم الواتساب مطلوب', 'error');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> جاري الحفظ...';
+
+      try {
+        data.offers.whatsappNumber = whatsapp;
+        data.offers.whatsappMessage = msg;
+
+        // Save to server
+        await saveData('offers', 'PUT', {
+          whatsappNumber: whatsapp,
+          whatsappMessage: msg,
+          offers: data.offers.offers
+        });
+
+        toast('تم حفظ الإعدادات ✓', 'success');
+      } catch {
+        toast('خطأ في حفظ الإعدادات', 'error');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '💾 حفظ الإعدادات';
     }
 
     // ==================== STAR RATING ====================
@@ -1653,172 +2426,20 @@
         .replace(/'/g, '&#39;');
     }
 
-    // ==================== OFFERS ====================
-    function renderOffers() {
-      const list = document.getElementById('offersList');
-      const items = data.offers.offers || [];
+    // ==================== EVENT DELEGATION ====================
+    function handleItemAction(e) {
+      const btn = e.target.closest('[data-action]');
+      if (!btn) return;
+      const { action, type, id, name } = btn.dataset;
 
-      if (!items.length) {
-        list.innerHTML = `<div class="empty-state">
-          <div class="empty-state__icon">🌟</div>
-          <p class="empty-state__text">مفيش عروض لسه. اضغط "إضافة عرض" عشان تبدأ.</p>
-        </div>`;
-        return;
+      if (action === 'edit') {
+        if (type === 'testimonials') editTestimonial(id);
+        else if (type === 'team') editTeamMember(id);
+        else if (type === 'portfolio') editProject(id);
+        else if (type === 'offers') editOffer(id);
+      } else if (action === 'delete') {
+        deleteItem(type, id, name);
       }
-
-      list.innerHTML = items.map((item, i) => `
-        <div class="item-card" draggable="true" data-id="${esc(item.id)}" data-type="offers" data-index="${i}">
-          <span class="item-card__drag" title="اسحب لتغيير الترتيب">⠿</span>
-          <div class="item-card__avatar">${esc(item.icon || '🌟')}</div>
-          <div class="item-card__content">
-            <div class="item-card__name">
-              ${item.popular ? '<span class="item-card__badge">🔥 الأكثر طلباً</span> ' : ''}
-              ${esc(item.titleAr)}
-            </div>
-            <div class="item-card__sub">${esc(item.priceAr)} — ${esc(item.titleEn)}</div>
-          </div>
-          <div class="item-card__actions">
-            <button class="item-card__btn" onclick="editOffer('${esc(item.id)}')">✏️</button>
-            <button class="item-card__btn item-card__btn--delete" onclick="deleteItem('offers','${esc(item.id)}','${esc(item.titleAr)}')">🗑️</button>
-          </div>
-        </div>
-      `).join('');
-
-      initDragDrop(list, 'offers');
-    }
-
-    function getOfferFormHTML(item) {
-      const d = item || {};
-      return `
-        <div class="form-group">
-          <label class="form-label">🎨 الأيقونة (إيموجي)</label>
-          <input class="form-input" id="f_icon" value="${esc(d.icon || '')}" placeholder="🛒" style="width:80px;text-align:center" dir="ltr">
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">العنوان <span class="form-label__lang">AR</span></label>
-            <input class="form-input" id="f_titleAr" value="${esc(d.titleAr || '')}" placeholder="متجر إلكتروني">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Title <span class="form-label__lang">EN</span></label>
-            <input class="form-input" id="f_titleEn" value="${esc(d.titleEn || '')}" placeholder="E-commerce Store" dir="ltr">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">الوصف <span class="form-label__lang">AR</span></label>
-          <textarea class="form-textarea" id="f_descAr" placeholder="وصف العرض بالعربي...">${esc(d.descriptionAr || '')}</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Description <span class="form-label__lang">EN</span></label>
-          <textarea class="form-textarea" id="f_descEn" placeholder="Offer description in English..." dir="ltr">${esc(d.descriptionEn || '')}</textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">السعر <span class="form-label__lang">AR</span></label>
-            <input class="form-input" id="f_priceAr" value="${esc(d.priceAr || '')}" placeholder="2,000 جنيه">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Price <span class="form-label__lang">EN</span></label>
-            <input class="form-input" id="f_priceEn" value="${esc(d.priceEn || '')}" placeholder="2,000 EGP" dir="ltr">
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">شارة <span class="form-label__lang">AR</span></label>
-            <input class="form-input" id="f_badgeAr" value="${esc(d.badgeAr || '')}" placeholder="أفضل قيمة">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Badge <span class="form-label__lang">EN</span></label>
-            <input class="form-input" id="f_badgeEn" value="${esc(d.badgeEn || '')}" placeholder="Best Value" dir="ltr">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">المميزات <span class="form-label__lang">AR</span> (سطر لكل ميزة)</label>
-          <textarea class="form-textarea" id="f_featuresAr" placeholder="دومين خاص\nتصميم متجاوب\nنموذج تواصل">${(d.featuresAr || []).join('\\n')}</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Features <span class="form-label__lang">EN</span> (one per line)</label>
-          <textarea class="form-textarea" id="f_featuresEn" placeholder="Custom domain\nResponsive design\nContact form" dir="ltr">${(d.featuresEn || []).join('\\n')}</textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-check">
-            <input type="checkbox" id="f_popular" ${d.popular ? 'checked' : ''}>
-            <span>🔥 الأكثر طلباً (يظهر بتمييز خاص)</span>
-          </label>
-        </div>
-      `;
-    }
-
-    function addOffer() {
-      editingItem = null;
-      editingType = 'offers';
-      openModal('إضافة عرض خاص', getOfferFormHTML(), saveOffer);
-    }
-
-    function editOffer(id) {
-      const item = (data.offers.offers || []).find(i => i.id === id);
-      if (!item) return;
-      editingItem = item;
-      editingType = 'offers';
-      openModal('تعديل عرض — ' + item.titleAr, getOfferFormHTML(item), saveOffer);
-    }
-
-    async function saveOffer() {
-      const itemData = {
-        icon: val('f_icon') || '🌟',
-        titleAr: val('f_titleAr'),
-        titleEn: val('f_titleEn'),
-        descriptionAr: val('f_descAr'),
-        descriptionEn: val('f_descEn'),
-        priceAr: val('f_priceAr'),
-        priceEn: val('f_priceEn'),
-        badgeAr: val('f_badgeAr'),
-        badgeEn: val('f_badgeEn'),
-        featuresAr: val('f_featuresAr').split('\n').filter(Boolean),
-        featuresEn: val('f_featuresEn').split('\n').filter(Boolean),
-        popular: document.getElementById('f_popular')?.checked || false,
-      };
-
-      if (!itemData.titleAr || !itemData.priceAr) {
-        toast('العنوان والسعر بالعربي مطلوبين', 'error');
-        return;
-      }
-
-      try {
-        if (editingItem) {
-          const result = await saveData('offers', 'PUT', itemData, editingItem.id);
-          if (result && result.item) {
-            const idx = (data.offers.offers || []).findIndex(i => i.id === editingItem.id);
-            if (idx > -1) data.offers.offers[idx] = { ...data.offers.offers[idx], ...result.item };
-            toast('تم تعديل العرض ✓', 'success');
-          }
-        } else {
-          const result = await saveData('offers', 'POST', itemData);
-          if (result && result.item) {
-            if (!data.offers.offers) data.offers.offers = [];
-            data.offers.offers.push(result.item);
-            toast('تم إضافة العرض ✓', 'success');
-          }
-        }
-        renderAll();
-        closeModal();
-      } catch {
-        toast('حدث خطأ — حاول تاني', 'error');
-      }
-    }
-
-    // ==================== SETTINGS ====================
-    async function saveSettings() {
-      const whatsapp = val('settingsWhatsapp');
-      const msg = val('settingsWhatsappMsg');
-
-      if (!whatsapp) {
-        toast('رقم الواتساب مطلوب', 'error');
-        return;
-      }
-
-      data.offers.whatsappNumber = whatsapp;
-      toast('تم حفظ الإعدادات ✓', 'success');
     }
 
     // ==================== EVENT BINDING ====================
@@ -1829,12 +2450,13 @@
       // Logout
       document.getElementById('logoutBtn').addEventListener('click', logout);
 
+      // Theme toggle
+      document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+      loadTheme();
+
       // Tabs
       document.querySelectorAll('.nav-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-          const panel = tab.dataset.panel;
-          switchPanel(panel);
-        });
+        tab.addEventListener('click', () => switchPanel(tab.dataset.panel));
       });
 
       // Overview cards click
@@ -1850,14 +2472,35 @@
 
       // Settings
       document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
-      // Load WhatsApp number into settings field
-      if (data.offers.whatsappNumber) {
-        document.getElementById('settingsWhatsapp').value = data.offers.whatsappNumber;
-      }
+
+      // Messages
+      document.getElementById('messagesFilter')?.addEventListener('change', renderMessages);
+      document.getElementById('refreshMessagesBtn')?.addEventListener('click', refreshMessages);
+
+      // Export/Import
+      document.getElementById('exportAllBtn').addEventListener('click', exportAllData);
+      document.getElementById('importFileInput').addEventListener('change', importData);
+
+      // Event delegation for item edit/delete buttons
+      document.querySelectorAll('.items-list').forEach(list => {
+        list.addEventListener('click', handleItemAction);
+      });
+
+      // Search inputs
+      document.querySelectorAll('[data-search]').forEach(input => {
+        input.addEventListener('input', (e) => {
+          const type = e.target.dataset.search;
+          searchFilters[type] = e.target.value.trim();
+          if (type === 'testimonials') renderTestimonials();
+          else if (type === 'team') renderTeam();
+          else if (type === 'portfolio') renderPortfolio();
+          else if (type === 'offers') renderOffers();
+        });
+      });
 
       // Modal
-      document.getElementById('modalClose').addEventListener('click', closeModal);
-      document.getElementById('modalCancel').addEventListener('click', closeModal);
+      document.getElementById('modalClose').addEventListener('click', () => closeModal());
+      document.getElementById('modalCancel').addEventListener('click', () => closeModal());
       document.getElementById('modalOverlay').addEventListener('click', (e) => {
         if (e.target === e.currentTarget) closeModal();
       });
@@ -1872,13 +2515,123 @@
         if (e.target === e.currentTarget) hideConfirm();
       });
 
-      // Keyboard
+      // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           closeModal();
           hideConfirm();
         }
+        // Ctrl+S to save (in modal or settings)
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+          e.preventDefault();
+          const modalOverlay = document.getElementById('modalOverlay');
+          if (modalOverlay.classList.contains('active')) {
+            document.getElementById('modalSave').click();
+          } else if (currentPanel === 'settings') {
+            document.getElementById('saveSettingsBtn').click();
+          }
+        }
+        // Ctrl+N to add new item
+        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+          e.preventDefault();
+          const modalOverlay = document.getElementById('modalOverlay');
+          if (!modalOverlay.classList.contains('active')) {
+            if (currentPanel === 'testimonials') addTestimonial();
+            else if (currentPanel === 'team') addTeamMember();
+            else if (currentPanel === 'portfolio') addProject();
+            else if (currentPanel === 'offers') addOffer();
+          }
+        }
+        // Ctrl+1-7 to switch tabs
+        if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '7') {
+          e.preventDefault();
+          const panels = ['overview', 'testimonials', 'team', 'portfolio', 'offers', 'messages', 'settings'];
+          const idx = parseInt(e.key) - 1;
+          if (panels[idx]) switchPanel(panels[idx]);
+        }
       });
+    }
+
+    // ==================== THEME ====================
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('xfuse_admin_theme', next);
+      document.getElementById('themeToggle').textContent = next === 'light' ? '☀️' : '🌙';
+    }
+
+    function loadTheme() {
+      const saved = localStorage.getItem('xfuse_admin_theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('themeToggle').textContent = saved === 'light' ? '☀️' : '🌙';
+    }
+
+    // ==================== EXPORT / IMPORT ====================
+    function exportAllData() {
+      const exportData = {
+        version: 1,
+        exportDate: new Date().toISOString(),
+        testimonials: data.testimonials,
+        team: data.team,
+        portfolio: data.portfolio,
+        offers: data.offers,
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `xfuse-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+      toast('تم تصدير البيانات ✓', 'success');
+    }
+
+    function importData(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          if (!imported.testimonials && !imported.team && !imported.portfolio && !imported.offers) {
+            toast('ملف غير صالح — مفيش بيانات معروفة', 'error');
+            return;
+          }
+
+          showConfirm('هل أنت متأكد من استيراد البيانات؟ ده هيستبدل البيانات الحالية.', async () => {
+            try {
+              if (imported.testimonials) {
+                await saveData('testimonials', 'PUT', imported.testimonials);
+                data.testimonials = imported.testimonials;
+              }
+              if (imported.team) {
+                await saveData('team', 'PUT', imported.team);
+                data.team = imported.team;
+              }
+              if (imported.portfolio) {
+                await saveData('portfolio', 'PUT', imported.portfolio);
+                data.portfolio = imported.portfolio;
+              }
+              if (imported.offers) {
+                await saveData('offers', 'PUT', imported.offers);
+                data.offers = imported.offers;
+              }
+              renderAll();
+              loadSettingsFields();
+              toast('تم استيراد البيانات بنجاح ✓', 'success');
+            } catch {
+              toast('خطأ في حفظ البيانات المستوردة', 'error');
+            }
+          });
+        } catch {
+          toast('ملف JSON غير صالح', 'error');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
     }
 
     function switchPanel(name) {
@@ -1888,7 +2641,6 @@
       });
       document.querySelectorAll('.panel').forEach(p => {
         const panelName = p.id.replace('panel', '').toLowerCase();
-        // panelOverview -> overview, panelTestimonials -> testimonials, etc.
         p.classList.toggle('active', panelName === name);
       });
     }

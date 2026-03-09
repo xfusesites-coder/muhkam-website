@@ -3,6 +3,7 @@ import { resolve } from 'path';
 import { cpSync, existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { createHmac, timingSafeEqual } from 'crypto';
+import 'dotenv/config';
 
 function copyDataPlugin() {
   return {
@@ -19,7 +20,65 @@ function copyDataPlugin() {
 function devApiPlugin() {
   const JWT_SECRET = 'xfuse-dev-secret';
   const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'xfuse2024';
-  const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio'];
+  const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio', 'offers', 'contact_submissions'];
+
+  /* ── Supabase client (service role for dev API) ── */
+  let _supabase = null;
+  async function getSupabase() {
+    if (_supabase !== undefined && _supabase !== null) return _supabase;
+    const url = process.env.VITE_SUPABASE_URL;
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!url || !key) { _supabase = null; return null; }
+    try {
+      const { createClient } = await import('@supabase/supabase-js');
+      _supabase = createClient(url, key);
+      return _supabase;
+    } catch { _supabase = null; return null; }
+  }
+
+  /* ── Field mapping: camelCase (API) ↔ snake_case (Supabase) ── */
+  const FIELD_MAP = {
+    testimonials: {
+      toDb: { nameEn: 'name_en', nameAr: 'name_ar', positionEn: 'position_en', positionAr: 'position_ar', quoteEn: 'quote_en', quoteAr: 'quote_ar', order: 'display_order', imageUrl: 'image_url' },
+      toApi: { name_en: 'nameEn', name_ar: 'nameAr', position_en: 'positionEn', position_ar: 'positionAr', quote_en: 'quoteEn', quote_ar: 'quoteAr', display_order: 'order', image_url: 'imageUrl', is_active: null },
+    },
+    team: {
+      toDb: { nameEn: 'name_en', nameAr: 'name_ar', roleEn: 'role_en', roleAr: 'role_ar', quoteEn: 'quote_en', quoteAr: 'quote_ar', imageUrl: 'image_url', order: 'display_order' },
+      toApi: { name_en: 'nameEn', name_ar: 'nameAr', role_en: 'roleEn', role_ar: 'roleAr', quote_en: 'quoteEn', quote_ar: 'quoteAr', image_url: 'imageUrl', display_order: 'order', is_active: null },
+    },
+    portfolio: {
+      toDb: { titleEn: 'title_en', titleAr: 'title_ar', descriptionEn: 'description_en', descriptionAr: 'description_ar', tagEn: 'tag_en', tagAr: 'tag_ar', imageUrl: 'image_url', order: 'display_order' },
+      toApi: { title_en: 'titleEn', title_ar: 'titleAr', description_en: 'descriptionEn', description_ar: 'descriptionAr', tag_en: 'tagEn', tag_ar: 'tagAr', image_url: 'imageUrl', display_order: 'order', is_active: null },
+    },
+    offers: {
+      toDb: { titleEn: 'title_en', titleAr: 'title_ar', descriptionEn: 'description_en', descriptionAr: 'description_ar', priceEn: 'price_en', priceAr: 'price_ar', badgeEn: 'badge_en', badgeAr: 'badge_ar', featuresEn: 'features_en', featuresAr: 'features_ar', order: 'display_order' },
+      toApi: { title_en: 'titleEn', title_ar: 'titleAr', description_en: 'descriptionEn', description_ar: 'descriptionAr', price_en: 'priceEn', price_ar: 'priceAr', badge_en: 'badgeEn', badge_ar: 'badgeAr', features_en: 'featuresEn', features_ar: 'featuresAr', display_order: 'order', is_active: null },
+    },
+    contact_submissions: {
+      toDb: {},
+      toApi: { created_at: 'createdAt' },
+    },
+  };
+
+  function mapToApi(row, type) {
+    const map = FIELD_MAP[type]?.toApi || {};
+    const result = {};
+    for (const [key, val] of Object.entries(row)) {
+      if (map[key] === null) continue;
+      result[map[key] || key] = val;
+    }
+    return result;
+  }
+
+  function mapToDb(item, type) {
+    const map = FIELD_MAP[type]?.toDb || {};
+    const result = {};
+    for (const [key, val] of Object.entries(item)) {
+      if (key === 'id') continue;
+      result[map[key] || key] = val;
+    }
+    return result;
+  }
 
   function sign(payload) {
     const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
@@ -49,7 +108,13 @@ function devApiPlugin() {
     if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
     writeFileSync(dataPath(type), JSON.stringify(data, null, 2), 'utf-8');
   }
-  function listKey(type) { return type === 'team' ? 'members' : type === 'portfolio' ? 'projects' : 'items'; }
+  function listKey(type) {
+    if (type === 'team') return 'members';
+    if (type === 'portfolio') return 'projects';
+    if (type === 'offers') return 'offers';
+    if (type === 'contact_submissions') return 'messages';
+    return 'items';
+  }
   function defaultData(type) { return { [listKey(type)]: [] }; }
 
   function sanitize(str) { return typeof str !== 'string' ? '' : str.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').trim().slice(0, 2000); }
@@ -85,7 +150,7 @@ function devApiPlugin() {
   return {
     name: 'dev-api',
     configureServer(server) {
-      server.middlewares.use((req, res, next) => {
+      server.middlewares.use(async (req, res, next) => {
         // CORS preflight
         if (req.method === 'OPTIONS' && req.url.startsWith('/api/')) {
           res.writeHead(200, {
@@ -113,6 +178,28 @@ function devApiPlugin() {
           return;
         }
 
+        // ── Contact form endpoint ──
+        if (req.url === '/api/contact' && req.method === 'POST') {
+          let body = '';
+          req.on('data', c => body += c);
+          req.on('end', async () => {
+            try {
+              const { name, email, message, _honey } = JSON.parse(body);
+              if (_honey) return json(res, 200, { message: 'OK' }); // honeypot
+              if (!name || !email || !message) return json(res, 400, { error: 'Missing fields' });
+
+              const sb = await getSupabase();
+              if (sb) {
+                await sb.from('contact_submissions').insert({
+                  name: sanitize(name), email: sanitize(email), message: sanitize(message).slice(0, 5000), status: 'new',
+                });
+              }
+              return json(res, 200, { message: 'تم الإرسال بنجاح' });
+            } catch { return json(res, 500, { error: 'Server error' }); }
+          });
+          return;
+        }
+
         // ── Content endpoint ──
         if (req.url.startsWith('/api/content')) {
           const url = new URL(req.url, 'http://localhost');
@@ -121,26 +208,60 @@ function devApiPlugin() {
 
           if (!type || !ALLOWED_TYPES.includes(type)) return json(res, 400, { error: 'Invalid type' });
 
-          // GET — public
+          // Auth check helper
+          const authCheck = () => {
+            const auth = req.headers.authorization;
+            if (!auth || !auth.startsWith('Bearer ')) return false;
+            return !!verify(auth.slice(7));
+          };
+
+          // GET
           if (req.method === 'GET') {
-            const data = readData(type);
-            return data ? json(res, 200, data) : json(res, 404, { error: 'Not found' });
+            // contact_submissions requires auth
+            if (type === 'contact_submissions' && !authCheck()) return json(res, 401, { error: 'Auth required' });
+
+            const sb = await getSupabase();
+            if (sb) {
+              const orderCol = type === 'contact_submissions' ? 'created_at' : 'display_order';
+              const ascending = type !== 'contact_submissions';
+              const { data: rows, error } = await sb.from(type).select('*').order(orderCol, { ascending });
+              if (!error && rows) {
+                const key = listKey(type);
+                const mapped = rows.map(r => mapToApi(r, type));
+                return json(res, 200, { [key]: mapped });
+              }
+            }
+            // JSON fallback (not for contact_submissions)
+            if (type !== 'contact_submissions') {
+              const data = readData(type);
+              return data ? json(res, 200, data) : json(res, 200, { [listKey(type)]: [] });
+            }
+            return json(res, 200, { messages: [] });
           }
 
           // Auth check for writes
-          const auth = req.headers.authorization;
-          if (!auth || !auth.startsWith('Bearer ')) return json(res, 401, { error: 'Auth required' });
-          if (!verify(auth.slice(7))) return json(res, 401, { error: 'Invalid token' });
+          if (!authCheck()) return json(res, 401, { error: 'Auth required' });
+
+          // POST not allowed for contact_submissions via admin
+          if (req.method === 'POST' && type === 'contact_submissions') return json(res, 405, { error: 'Use contact form' });
 
           let body = '';
           req.on('data', c => body += c);
-          req.on('end', () => {
+          req.on('end', async () => {
             try {
-              const payload = JSON.parse(body);
-              const data = readData(type) || defaultData(type);
-              const key = listKey(type);
+              const payload = body ? JSON.parse(body) : {};
+              const sb = await getSupabase();
 
               if (req.method === 'POST') {
+                if (sb) {
+                  const dbRow = mapToDb(payload, type);
+                  dbRow.is_active = true;
+                  const { data: inserted, error } = await sb.from(type).insert(dbRow).select().single();
+                  if (!error && inserted) return json(res, 201, { item: mapToApi(inserted, type), message: 'Added' });
+                }
+                // JSON fallback
+                const data = readData(type) || defaultData(type);
+                const key = listKey(type);
                 const item = sanitizeItem(payload, type);
                 if (!item.id || data[key].some(i => i.id === item.id)) item.id = `${type.charAt(0)}${Date.now()}`;
                 item.order = data[key].length + 1;
@@ -150,14 +271,34 @@ function devApiPlugin() {
               }
 
               if (req.method === 'PUT') {
-                if (payload.order && Array.isArray(payload.order)) {
-                  const reordered = [];
-                  payload.order.forEach((oid, i) => { const f = data[key].find(x => x.id === oid); if (f) { f.order = i + 1; reordered.push(f); } });
-                  data[key] = reordered;
-                  saveData(type, data);
+                // contact_submissions: only status update
+                if (type === 'contact_submissions' && id && sb) {
+                  const { status } = payload;
+                  if (!['new', 'read', 'replied'].includes(status)) return json(res, 400, { error: 'Invalid status' });
+                  const { error } = await sb.from(type).update({ status }).eq('id', id);
+                  if (!error) return json(res, 200, { message: 'Updated' });
+                  return json(res, 500, { error: error.message });
+                }
+
+                // Reorder
+                if (payload.order && Array.isArray(payload.order) && sb) {
+                  for (let i = 0; i < payload.order.length; i++) {
+                    await sb.from(type).update({ display_order: i + 1 }).eq('id', payload.order[i]);
+                  }
                   return json(res, 200, { message: 'Reordered' });
                 }
+
                 if (!id) return json(res, 400, { error: 'ID required' });
+
+                if (sb) {
+                  const dbRow = mapToDb(payload, type);
+                  const { data: updated, error } = await sb.from(type).update(dbRow).eq('id', id).select().single();
+                  if (!error && updated) return json(res, 200, { item: mapToApi(updated, type), message: 'Updated' });
+                }
+
+                // JSON fallback
+                const data = readData(type) || defaultData(type);
+                const key = listKey(type);
                 const idx = data[key].findIndex(x => x.id === id);
                 if (idx === -1) return json(res, 404, { error: 'Not found' });
                 const item = sanitizeItem({ ...data[key][idx], ...payload }, type);
@@ -169,6 +310,15 @@ function devApiPlugin() {
 
               if (req.method === 'DELETE') {
                 if (!id) return json(res, 400, { error: 'ID required' });
+
+                if (sb) {
+                  const { error } = await sb.from(type).delete().eq('id', id);
+                  if (!error) return json(res, 200, { message: 'Deleted' });
+                }
+
+                // JSON fallback
+                const data = readData(type) || defaultData(type);
+                const key = listKey(type);
                 const idx = data[key].findIndex(x => x.id === id);
                 if (idx === -1) return json(res, 404, { error: 'Not found' });
                 data[key].splice(idx, 1);
@@ -178,7 +328,7 @@ function devApiPlugin() {
               }
 
               return json(res, 405, { error: 'Method not allowed' });
-            } catch { return json(res, 500, { error: 'Server error' }); }
+            } catch (e) { return json(res, 500, { error: 'Server error' }); }
           });
           return;
         }

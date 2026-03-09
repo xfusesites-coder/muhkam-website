@@ -25,6 +25,90 @@
   height: 100vh;
 }
 
+/* Ambient gradient background */
+.scene0__ambient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(59, 130, 246, 0.08), transparent 60%),
+    radial-gradient(ellipse at 70% 30%, rgba(99, 102, 241, 0.06), transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(59, 130, 246, 0.04), transparent 40%);
+  z-index: 1;
+  pointer-events: none;
+  animation: scene0-ambient-pulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes scene0-ambient-pulse {
+  0%   { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* Welcome tagline — visible immediately */
+.scene0__welcome {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 7;
+  pointer-events: none;
+  will-change: opacity, transform;
+  animation: scene0-welcome-in 1.5s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+}
+
+.scene0__welcome-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--accent-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: var(--space-lg);
+  opacity: 0.8;
+}
+
+.scene0__welcome-title {
+  font-family: var(--font-display);
+  font-size: var(--text-display);
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: var(--space-lg);
+  letter-spacing: -0.02em;
+}
+
+[data-lang="ar"] .scene0__welcome-title {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+}
+
+.scene0__welcome-title strong {
+  background: linear-gradient(135deg, var(--accent-primary), #818CF8, var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scene0__welcome-desc {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  letter-spacing: 0.05em;
+}
+
+@keyframes scene0-welcome-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    filter: blur(0px);
+  }
+}
+
 /* The initial light dot */
 .scene0__dot {
   position: absolute;
@@ -119,14 +203,27 @@
   z-index: 6;
   color: var(--text-muted);
   font-size: var(--text-small);
-  font-family: var(--font-body);
+  font-family: var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   animation: scene0-scroll-pulse 2s ease-in-out infinite;
 }
 
 .scene0__scroll-hint-line {
   width: 1px;
-  height: 30px;
-  background: linear-gradient(to bottom, var(--text-muted), transparent);
+  height: 40px;
+  background: linear-gradient(to bottom, var(--accent-primary), transparent);
+  animation: scroll-line 2s ease-in-out infinite;
+}
+
+.scene0__scroll-chevron {
+  animation: scene0-chevron-bounce 2s ease-in-out infinite;
+  opacity: 0.5;
+}
+
+@keyframes scene0-chevron-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.3; }
+  50% { transform: translateY(6px); opacity: 0.8; }
 }
 
 @keyframes scene0-scroll-pulse {
@@ -307,7 +404,16 @@
 .scene1__orbit-icon {
   font-size: 2rem;
   margin-bottom: var(--space-sm);
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-primary);
+}
+
+.scene1__orbit-icon svg {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 0 6px var(--accent-glow));
 }
 
 .scene1__orbit-title {
@@ -1346,6 +1452,9 @@
 .scene4__metric-icon {
   font-size: 1rem;
   flex-shrink: 0;
+  color: var(--accent-primary);
+  display: inline-flex;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -2395,8 +2504,16 @@
   box-shadow: 0 0 30px var(--accent-glow);
 }
 
+.scene4__project:hover .scene4__project-img img {
+  transform: scale(1.05);
+}
+
 .scene4__project-img {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.scene4__project-img img {
+  transition: transform 0.4s ease;
 }
 
 /* Scene 5 — Team card hover */

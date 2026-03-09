@@ -4,6 +4,8 @@
  * FAQ: pinned scroll to reveal overflowing content within the viewport.
  */
 import { prefersReducedMotion } from '../core/utils.js';
+import { loadOffers } from '../components/offers.js';
+import { loadFaq } from '../components/faq.js';
 
 function pinScrollableSection(id) {
   const section = document.getElementById(id);
@@ -42,8 +44,10 @@ function pinScrollableSection(id) {
   });
 }
 
-export function initOffers() {
+export async function initOffers() {
   if (prefersReducedMotion() || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  await loadOffers();
 
   const section = document.getElementById('scene-offers');
   if (!section) return;
@@ -86,9 +90,19 @@ export function initOffers() {
       }
     );
   }
+
+  // Scroll spy: mark offers as active nav section
+  ScrollTrigger.create({
+    trigger: section,
+    start: 'top 50%',
+    end: 'bottom 50%',
+    onEnter: () => document.body.setAttribute('data-scene', 'offers'),
+    onEnterBack: () => document.body.setAttribute('data-scene', 'offers'),
+  });
 }
 
-export function initFaq() {
+export async function initFaq() {
   if (prefersReducedMotion() || typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+  await loadFaq();
   pinScrollableSection('scene-faq');
 }

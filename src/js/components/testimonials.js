@@ -1,7 +1,8 @@
 /**
  * Xfuse — Testimonials (Swiper)
- * Loads data from /data/testimonials.json
+ * Loads data from Supabase → fallback to /data/testimonials.json
  */
+import { fetchTable } from '../lib/supabase.js';
 
 function generateStarsHTML(count) {
   const starSVG = '<svg class="star" viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="url(#star-grad)"/></svg>';
@@ -32,17 +33,27 @@ export async function initTestimonials() {
   const container = document.querySelector('.testimonial-swiper');
   if (!container) return;
 
-  // Load dynamic data
+  // Load dynamic data from Supabase (with JSON fallback)
   try {
-    const res = await fetch('/data/testimonials.json');
-    if (res.ok) {
-      const json = await res.json();
-      const items = (json.items || []).sort((a, b) => a.order - b.order);
-      if (items.length) {
-        const wrapper = container.querySelector('.swiper-wrapper');
-        if (wrapper) {
-          wrapper.innerHTML = items.map(buildSlideHTML).join('');
-        }
+    const items = await fetchTable('testimonials', {
+      fallbackUrl: '/data/testimonials.json',
+      listKey: 'items',
+    });
+    if (items.length) {
+      // Map Supabase column names to template names
+      const mapped = items.map(t => ({
+        nameEn: t.name_en || t.nameEn || '',
+        nameAr: t.name_ar || t.nameAr || '',
+        positionEn: t.position_en || t.positionEn || '',
+        positionAr: t.position_ar || t.positionAr || '',
+        quoteEn: t.quote_en || t.quoteEn || '',
+        quoteAr: t.quote_ar || t.quoteAr || '',
+        initials: t.initials || '',
+        rating: t.rating || 5,
+      }));
+      const wrapper = container.querySelector('.swiper-wrapper');
+      if (wrapper) {
+        wrapper.innerHTML = mapped.map(buildSlideHTML).join('');
       }
     }
   } catch {

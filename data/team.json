@@ -55,6 +55,32 @@
       "linkedin": "",
       "github": "",
       "order": 4
+    },
+    {
+      "id": "km",
+      "initials": "KM",
+      "nameEn": "Dr. Khalifa Mohamed",
+      "nameAr": "د. خليفة محمد",
+      "roleEn": "General Manager",
+      "roleAr": "المدير العام",
+      "quoteEn": "Success starts with a clear vision and a strong team",
+      "quoteAr": "النجاح يبدأ من رؤية واضحة وفريق قوي",
+      "linkedin": "https://linkedin.com/in/khalifa-mohamed",
+      "github": "",
+      "order": 5
+    },
+    {
+      "id": "tq",
+      "initials": "TQ",
+      "nameEn": "Tarek Elkady",
+      "nameAr": "طارق القاضي",
+      "roleEn": "QA Engineer",
+      "roleAr": "مهندس اختبار البرمجيات",
+      "quoteEn": "Quality is not a luxury, it is the foundation of every successful product",
+      "quoteAr": "الجودة مش رفاهية، دي أساس كل منتج ناجح",
+      "linkedin": "",
+      "github": "https://github.com/tarek-qa",
+      "order": 6
     }
   ]
 }

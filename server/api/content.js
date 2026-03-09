@@ -1,14 +1,15 @@
 /**
  * Xfuse — Content API Handler
  * Vercel Serverless Function
- * CRUD operations for testimonials, team, and portfolio content
+ * CRUD operations for testimonials, team, portfolio, and offers content
  */
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import { verifyToken } from './auth.js';
 
 const DATA_DIR = join(process.cwd(), 'data');
-const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio'];
+const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio', 'offers'];
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
 
 function getDataPath(type) {
   return join(DATA_DIR, `${type}.json`);
@@ -41,6 +42,11 @@ function sanitizeString(str) {
     .slice(0, 2000);
 }
 
+function sanitizeStringArray(arr) {
+  if (!Array.isArray(arr)) return [];
+  return arr.filter(s => typeof s === 'string').map(s => sanitizeString(s)).slice(0, 50);
+}
+
 function sanitizeItem(item, type) {
   const sanitized = {};
 
@@ -66,6 +72,7 @@ function sanitizeItem(item, type) {
     sanitized.quoteAr = sanitizeString(item.quoteAr);
     sanitized.linkedin = sanitizeString(item.linkedin).slice(0, 500);
     sanitized.github = sanitizeString(item.github).slice(0, 500);
+    sanitized.image = sanitizeString(item.image).slice(0, 500);
     sanitized.order = parseInt(item.order) || 0;
   } else if (type === 'portfolio') {
     sanitized.id = sanitizeString(item.id || `p${Date.now()}`);
@@ -79,14 +86,37 @@ function sanitizeItem(item, type) {
     sanitized.link = sanitizeString(item.link).slice(0, 500);
     sanitized.featured = Boolean(item.featured);
     sanitized.order = parseInt(item.order) || 0;
+  } else if (type === 'offers') {
+    sanitized.id = sanitizeString(item.id || `o${Date.now()}`);
+    sanitized.icon = sanitizeString(item.icon).slice(0, 10);
+    sanitized.titleEn = sanitizeString(item.titleEn);
+    sanitized.titleAr = sanitizeString(item.titleAr);
+    sanitized.descriptionEn = sanitizeString(item.descriptionEn);
+    sanitized.descriptionAr = sanitizeString(item.descriptionAr);
+    sanitized.priceEn = sanitizeString(item.priceEn).slice(0, 100);
+    sanitized.priceAr = sanitizeString(item.priceAr).slice(0, 100);
+    sanitized.badgeEn = sanitizeString(item.badgeEn).slice(0, 100);
+    sanitized.badgeAr = sanitizeString(item.badgeAr).slice(0, 100);
+    sanitized.featuresEn = sanitizeStringArray(item.featuresEn);
+    sanitized.featuresAr = sanitizeStringArray(item.featuresAr);
+    sanitized.popular = Boolean(item.popular);
+    sanitized.order = parseInt(item.order) || 0;
   }
 
   return sanitized;
 }
 
+function getCorsOrigin(req) {
+  const origin = req.headers.origin || req.headers.referer || '';
+  if (ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return origin;
+  return ALLOWED_ORIGINS[0];
+}
+
 export default async function handler(req, res) {
   // CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const corsOrigin = getCorsOrigin(req);
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -215,6 +245,7 @@ function getListKey(type) {
   if (type === 'testimonials') return 'items';
   if (type === 'team') return 'members';
   if (type === 'portfolio') return 'projects';
+  if (type === 'offers') return 'offers';
   return 'items';
 }
 
@@ -222,5 +253,6 @@ function getDefaultData(type) {
   if (type === 'testimonials') return { items: [] };
   if (type === 'team') return { members: [] };
   if (type === 'portfolio') return { projects: [] };
+  if (type === 'offers') return { offers: [] };
   return { items: [] };
 }

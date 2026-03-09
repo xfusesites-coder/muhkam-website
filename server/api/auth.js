@@ -4,8 +4,18 @@
  * Simple password-based auth with JWT
  */
 import { SignJWT, jwtVerify } from 'jose';
+import crypto from 'crypto';
 
-const SECRET = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET || 'xfuse-default-secret-change-me');
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
+
+if (!process.env.ADMIN_JWT_SECRET && process.env.NODE_ENV === 'production') {
+  throw new Error('ADMIN_JWT_SECRET environment variable is required in production');
+}
+if (!process.env.ADMIN_PASSWORD && process.env.NODE_ENV === 'production') {
+  throw new Error('ADMIN_PASSWORD environment variable is required in production');
+}
+
+const SECRET = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET || 'xfuse-dev-secret-local-only');
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'xfuse2024';
 
 export async function createToken() {
@@ -25,9 +35,17 @@ export async function verifyToken(token) {
   }
 }
 
+function getCorsOrigin(req) {
+  const origin = req.headers.origin || req.headers.referer || '';
+  if (ALLOWED_ORIGINS.includes('*') || ALLOWED_ORIGINS.some(o => origin.startsWith(o))) return origin;
+  return ALLOWED_ORIGINS[0];
+}
+
 export default async function handler(req, res) {
   // CORS for admin
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const corsOrigin = getCorsOrigin(req);
+  res.setHeader('Access-Control-Allow-Origin', corsOrigin);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
@@ -51,7 +69,7 @@ export default async function handler(req, res) {
     const adminBuffer = Buffer.from(ADMIN_PASSWORD);
 
     if (passwordBuffer.length !== adminBuffer.length ||
-        !require('crypto').timingSafeEqual(passwordBuffer, adminBuffer)) {
+        !crypto.timingSafeEqual(passwordBuffer, adminBuffer)) {
       return res.status(401).json({ error: 'Invalid password' });
     }
 

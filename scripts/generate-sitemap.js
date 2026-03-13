@@ -1,11 +1,11 @@
 /**
- * Xfuse — Sitemap Generator
+ * Muhkam — Sitemap Generator
  * Generates sitemap.xml from site configuration
  * Run: node scripts/generate-sitemap.js
  */
 import { writeFileSync } from 'fs';
 
-const DOMAIN = 'https://xfuse.dev';
+const DOMAIN = 'https://Muhkam.dev';
 const OUTPUT = 'public/sitemap.xml';
 
 const pages = [

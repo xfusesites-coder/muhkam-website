@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 1: "Discovery"
+ * Muhkam — Scene 1: "Discovery"
  * Logo center + 4 service orbits appearing with scroll
  * Stats counter + constellation lines between services
  */

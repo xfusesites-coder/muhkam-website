@@ -1,5 +1,5 @@
 /**
- * Xfuse — Contact Form
+ * Muhkam — Contact Form
  */
 import { sanitizeInput, isValidEmail, validateContactForm } from '../security/sanitize.js';
 import { canSubmitForm } from '../security/rate-limit.js';

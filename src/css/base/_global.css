@@ -37,6 +37,7 @@ body::after {
 
 /* Smooth scroll for sections */
 html {
+  overflow-x: hidden;
   scroll-padding-top: 5rem;
 }
 

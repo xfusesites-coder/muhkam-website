@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /server/
 
-Sitemap: https://xfuse.dev/sitemap.xml
+Sitemap: https://muhkam.com/sitemap.xml

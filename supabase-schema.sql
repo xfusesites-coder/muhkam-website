@@ -1,5 +1,5 @@
 -- ============================================
--- Xfuse Website — Supabase Database Schema
+-- Muhkam Website — Supabase Database Schema
 -- Run this SQL in: Supabase Dashboard → SQL Editor
 -- ============================================
 
@@ -138,6 +138,34 @@ CREATE TABLE contact_submissions (
   read_at timestamptz
 );
 
+-- 10. Why Muhkam (Orbital Ring Benefits)
+CREATE TABLE why_muhkam (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  title_ar text NOT NULL DEFAULT '',
+  title_en text NOT NULL DEFAULT '',
+  description_ar text NOT NULL DEFAULT '',
+  description_en text NOT NULL DEFAULT '',
+  icon_svg text NOT NULL DEFAULT '',
+  accent_color text NOT NULL DEFAULT '#3B82F6',
+  display_order integer NOT NULL DEFAULT 0,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamptz DEFAULT now()
+);
+
+-- 11. Process Steps (How We Work Timeline)
+CREATE TABLE process_steps (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  title_ar text NOT NULL DEFAULT '',
+  title_en text NOT NULL DEFAULT '',
+  description_ar text NOT NULL DEFAULT '',
+  description_en text NOT NULL DEFAULT '',
+  icon_svg text NOT NULL DEFAULT '',
+  accent_color text NOT NULL DEFAULT '#3B82F6',
+  display_order integer NOT NULL DEFAULT 0,
+  is_active boolean NOT NULL DEFAULT true,
+  created_at timestamptz DEFAULT now()
+);
+
 -- ============================================
 -- Row Level Security (RLS)
 -- ============================================
@@ -151,6 +179,8 @@ ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
 ALTER TABLE offers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE faq ENABLE ROW LEVEL SECURITY;
 ALTER TABLE contact_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE why_muhkam ENABLE ROW LEVEL SECURITY;
+ALTER TABLE process_steps ENABLE ROW LEVEL SECURITY;
 
 -- Public READ policies (anyone can read active items)
 CREATE POLICY "Public read site_settings" ON site_settings FOR SELECT USING (true);
@@ -161,6 +191,8 @@ CREATE POLICY "Public read team" ON team FOR SELECT TO anon USING (is_active = t
 CREATE POLICY "Public read testimonials" ON testimonials FOR SELECT TO anon USING (is_active = true);
 CREATE POLICY "Public read offers" ON offers FOR SELECT TO anon USING (is_active = true);
 CREATE POLICY "Public read faq" ON faq FOR SELECT TO anon USING (is_active = true);
+CREATE POLICY "Public read why_muhkam" ON why_muhkam FOR SELECT TO anon USING (is_active = true);
+CREATE POLICY "Public read process_steps" ON process_steps FOR SELECT TO anon USING (is_active = true);
 
 -- Public INSERT on contact_submissions (visitors can submit)
 CREATE POLICY "Public insert contact" ON contact_submissions FOR INSERT TO anon WITH CHECK (true);
@@ -175,6 +207,8 @@ CREATE POLICY "Service role full access testimonials" ON testimonials FOR ALL TO
 CREATE POLICY "Service role full access offers" ON offers FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service role full access faq" ON faq FOR ALL TO service_role USING (true) WITH CHECK (true);
 CREATE POLICY "Service role full access contact" ON contact_submissions FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access why_muhkam" ON why_muhkam FOR ALL TO service_role USING (true) WITH CHECK (true);
+CREATE POLICY "Service role full access process_steps" ON process_steps FOR ALL TO service_role USING (true) WITH CHECK (true);
 
 -- Authenticated role full access (for admin via Supabase auth or service key)
 CREATE POLICY "Auth full access site_settings" ON site_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);
@@ -186,6 +220,8 @@ CREATE POLICY "Auth full access testimonials" ON testimonials FOR ALL TO authent
 CREATE POLICY "Auth full access offers" ON offers FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Auth full access faq" ON faq FOR ALL TO authenticated USING (true) WITH CHECK (true);
 CREATE POLICY "Auth full access contact" ON contact_submissions FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Auth full access why_muhkam" ON why_muhkam FOR ALL TO authenticated USING (true) WITH CHECK (true);
+CREATE POLICY "Auth full access process_steps" ON process_steps FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
 -- ============================================
 -- Storage Buckets

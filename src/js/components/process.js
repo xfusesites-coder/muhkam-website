@@ -1,5 +1,5 @@
 /**
- * Xfuse — Process Timeline (scroll-triggered line fill + dot activation)
+ * Muhkam — Process Timeline (scroll-triggered line fill + dot activation)
  */
 import { prefersReducedMotion } from '../core/utils.js';
 

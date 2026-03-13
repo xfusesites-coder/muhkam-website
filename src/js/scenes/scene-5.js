@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 5: "The Crew" (Team)
+ * Muhkam — Scene 5: "The Crew" (Team)
  * Crew reveal with flip cards, typewriter quotes, constellation connections
  */
 import { prefersReducedMotion } from '../core/utils.js';

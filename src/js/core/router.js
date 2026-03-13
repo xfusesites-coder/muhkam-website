@@ -1,5 +1,5 @@
 /**
- * Xfuse — Router (Smooth Scroll + URL Hash)
+ * Muhkam — Router (Smooth Scroll + URL Hash)
  * Handles non-nav anchor clicks and initial hash.
  */
 import { scrollToTarget } from './utils.js';

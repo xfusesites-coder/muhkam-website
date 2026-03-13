@@ -1,10 +1,10 @@
 /**
- * Xfuse — Security Headers Validation
- * Checks that all required security headers are present
- * Run: node tests/security.test.js
+ * Muhkam — Security Headers Validation
+ * Requires dev server running on localhost:3000
  */
+import { describe, it, expect, beforeAll } from 'vitest';
 
-const URL = 'http://localhost:3000';
+const SERVER_URL = 'http://localhost:3000';
 
 const REQUIRED_HEADERS = {
   'x-content-type-options': 'nosniff',
@@ -18,53 +18,36 @@ const RECOMMENDED_HEADERS = [
   'permissions-policy',
 ];
 
-async function runSecurityTests() {
-  console.log('🔒 Running security headers check...\n');
-
+async function isServerRunning() {
   try {
-    const res = await fetch(URL);
-    const headers = Object.fromEntries(res.headers.entries());
-    let passed = true;
-
-    // Required headers
-    console.log('Required Headers:');
-    for (const [header, expectedValue] of Object.entries(REQUIRED_HEADERS)) {
-      const actual = headers[header];
-      if (actual === expectedValue) {
-        console.log(`  ✅ ${header}: ${actual}`);
-      } else if (actual) {
-        console.log(`  ⚠️  ${header}: ${actual} (expected: ${expectedValue})`);
-      } else {
-        console.log(`  ❌ ${header}: MISSING`);
-        passed = false;
-      }
-    }
-
-    // Recommended headers
-    console.log('\nRecommended Headers:');
-    for (const header of RECOMMENDED_HEADERS) {
-      const actual = headers[header];
-      if (actual) {
-        console.log(`  ✅ ${header}: present`);
-      } else {
-        console.log(`  ⚠️  ${header}: MISSING (recommended for production)`);
-      }
-    }
-
-    // Check no sensitive info leaked
-    console.log('\nInformation Disclosure:');
-    const serverHeader = headers['server'];
-    const poweredBy = headers['x-powered-by'];
-    console.log(`  ${serverHeader ? '⚠️  Server header exposed: ' + serverHeader : '✅ Server header hidden'}`);
-    console.log(`  ${poweredBy ? '❌ X-Powered-By exposed: ' + poweredBy : '✅ X-Powered-By hidden'}`);
-
-    console.log(`\n${passed ? '✅ All required security headers present!' : '❌ Some required headers missing.'}`);
-    process.exit(passed ? 0 : 1);
-  } catch (err) {
-    console.error('Security test failed:', err.message);
-    console.log('Make sure the dev server is running on', URL);
-    process.exit(1);
+    await fetch(SERVER_URL, { signal: AbortSignal.timeout(2000) });
+    return true;
+  } catch {
+    return false;
   }
 }
 
-runSecurityTests();
+describe.skipIf(!await isServerRunning())('Security Headers', () => {
+  let headers;
+
+  beforeAll(async () => {
+    const res = await fetch(SERVER_URL);
+    headers = Object.fromEntries(res.headers.entries());
+  });
+
+  for (const [header, expectedValue] of Object.entries(REQUIRED_HEADERS)) {
+    it(`has required header: ${header}`, () => {
+      expect(headers[header]).toBe(expectedValue);
+    });
+  }
+
+  for (const header of RECOMMENDED_HEADERS) {
+    it(`has recommended header: ${header}`, () => {
+      expect(headers[header]).toBeDefined();
+    });
+  }
+
+  it('does not expose X-Powered-By', () => {
+    expect(headers['x-powered-by']).toBeUndefined();
+  });
+});

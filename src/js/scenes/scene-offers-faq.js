@@ -1,5 +1,5 @@
 /**
- * Xfuse — Offers & FAQ ScrollTrigger Animations
+ * Muhkam — Offers & FAQ ScrollTrigger Animations
  * Offers: cards stagger in with scroll-triggered entrance (no pin, natural scroll)
  * FAQ: pinned scroll to reveal overflowing content within the viewport.
  */

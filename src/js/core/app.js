@@ -1,5 +1,5 @@
 /**
- * Xfuse — App Initialization
+ * Muhkam — App Initialization
  * Lenis smooth scroll + GSAP/ScrollTrigger integration
  */
 import Lenis from 'lenis';

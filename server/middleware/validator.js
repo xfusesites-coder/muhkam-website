@@ -1,5 +1,5 @@
 /**
- * Xfuse — Server-side Input Validation & Sanitization
+ * Muhkam — Server-side Input Validation & Sanitization
  * This is the critical validation layer — never trust client-side alone
  */
 

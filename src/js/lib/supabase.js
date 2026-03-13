@@ -1,5 +1,5 @@
 /**
- * Xfuse — Supabase Client
+ * Muhkam — Supabase Client
  * Shared client for the main website (public reads with anon key)
  */
 import { createClient } from '@supabase/supabase-js';
@@ -8,7 +8,7 @@ const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('[Xfuse] Supabase not configured — falling back to local JSON data');
+  console.warn('[Muhkam] Supabase not configured — falling back to local JSON data');
 }
 
 export const supabase = (supabaseUrl && supabaseAnonKey)
@@ -28,7 +28,7 @@ export async function fetchTable(table, { fallbackUrl, listKey, orderCol = 'disp
       .order(orderCol, { ascending: true });
 
     if (!error && data && data.length) return data;
-    if (error) console.warn(`[Xfuse] Supabase ${table} error:`, error.message);
+    if (error) console.warn(`[Muhkam] Supabase ${table} error:`, error.message);
   }
 
   // Fallback to local JSON files

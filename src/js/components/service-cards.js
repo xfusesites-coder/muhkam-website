@@ -1,5 +1,5 @@
 /**
- * Xfuse — Service Cards (Card Spotlight effect handled by spotlight.js)
+ * Muhkam — Service Cards (Card Spotlight effect handled by spotlight.js)
  * This module handles ScrollTrigger reveal for cards
  */
 import { prefersReducedMotion } from '../core/utils.js';

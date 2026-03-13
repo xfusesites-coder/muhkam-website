@@ -1,5 +1,5 @@
 /**
- * Xfuse — Migrate JSON data to Supabase
+ * Muhkam — Migrate JSON data to Supabase
  * Run: node scripts/migrate-to-supabase.js
  * 
  * Required env vars: VITE_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
@@ -225,7 +225,7 @@ async function migrateSettings() {
   const settings = [
     { key: 'whatsapp_number', value: JSON.stringify('201029010778') },
     { key: 'whatsapp_message', value: JSON.stringify('مرحباً، أنا مهتم بخدماتكم') },
-    { key: 'contact_email', value: JSON.stringify('hello@xfuse.dev') },
+    { key: 'contact_email', value: JSON.stringify('hello@Muhkam.dev') },
     { key: 'hero_content', value: JSON.stringify({
       titleAr: 'نحول أفكارك\nلحقيقة رقمية',
       titleEn: 'We turn ideas into\ndigital reality',

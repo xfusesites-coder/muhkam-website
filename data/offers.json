@@ -33,8 +33,8 @@
       "titleAr": "متجر إلكتروني",
       "descriptionEn": "Complete online store with your official domain, product management, and payment integration.",
       "descriptionAr": "متجر أونلاين كامل بالدومين الرسمي وإدارة المنتجات والدفع الإلكتروني.",
-      "priceEn": "2,000 EGP",
-      "priceAr": "2,000 جنيه",
+      "priceEn": "2,500 EGP",
+      "priceAr": "2,500 جنيه",
       "badgeEn": "",
       "badgeAr": "",
       "popular": true,
@@ -81,8 +81,39 @@
         "لوحة تحكم"
       ],
       "order": 3
+    },
+    {
+      "id": "o4",
+      "icon": "📱",
+      "titleEn": "Mobile Application",
+      "titleAr": "تطبيق موبايل",
+      "descriptionEn": "Professional mobile app for Android & iOS with custom UI/UX design and admin panel.",
+      "descriptionAr": "تطبيق موبايل احترافي لأندرويد وiOS بتصميم مخصص ولوحة تحكم إدارية.",
+      "priceEn": "Starting from 5,000 EGP",
+      "priceAr": "يبدأ من 5,000 جنيه",
+      "badgeEn": "New",
+      "badgeAr": "جديد",
+      "popular": false,
+      "featuresEn": [
+        "Android + iOS",
+        "Custom UI/UX design",
+        "Push notifications",
+        "Admin dashboard",
+        "API integration"
+      ],
+      "featuresAr": [
+        "أندرويد + iOS",
+        "تصميم UI/UX مخصص",
+        "إشعارات فورية",
+        "لوحة تحكم إدارية",
+        "ربط API"
+      ],
+      "order": 4
     }
   ],
+  "limitedOffer": true,
+  "limitedOfferTextEn": "Exclusive launch offers — ends May 2025!",
+  "limitedOfferTextAr": "عروض إطلاق حصرية — تنتهي في مايو 2025!",
   "customCtaEn": "Need something custom? Custom apps, systems, and platforms — priced based on your requirements.",
   "customCtaAr": "محتاج حاجة مخصصة؟ تطبيقات وأنظمة ومنصات مخصصة — السعر حسب الطلب.",
   "whatsappNumber": "201029010778"

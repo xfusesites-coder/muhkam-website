@@ -1,6 +1,6 @@
-# Xfuse — Digital Solutions Studio
+# Muhkam — Precisely Crafted Digital Solutions
 
-> We build mobile apps, web platforms, and enterprise systems that drive real business growth.
+> نبني تطبيقات موبايل ومنصات ويب وأنظمة مؤسسات بإتقان. حلول رقمية مُحكَمة من مصر للعالم.
 
 ## Tech Stack
 
@@ -30,7 +30,7 @@ npm run preview
 ## Project Structure
 
 ```
-xfuse/
+muhkam/
 ├── index.html              # Main entry point
 ├── 404.html                # Custom error page
 ├── src/
@@ -64,4 +64,4 @@ npm run build
 
 ## License
 
-MIT © 2026 Xfuse Digital Solutions
+MIT © 2025 Muhkam Digital Solutions

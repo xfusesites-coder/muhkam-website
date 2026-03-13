@@ -1,5 +1,5 @@
 /**
- * Xfuse — Critical CSS Generator
+ * Muhkam — Critical CSS Generator
  * Extracts above-the-fold CSS for inline embedding
  * Run: node scripts/generate-critical-css.js
  * Requires: npm i -D critical

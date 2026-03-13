@@ -1,5 +1,5 @@
 -- ============================================
--- Xfuse Website — Supabase Database Schema
+-- Muhkam Website — Supabase Database Schema
 -- Run this SQL in: Supabase Dashboard → SQL Editor
 -- ============================================
 

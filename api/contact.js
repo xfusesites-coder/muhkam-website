@@ -113,8 +113,8 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        personalizations: [{ to: [{ email: process.env.CONTACT_EMAIL || 'hello@xfuse.dev' }] }],
-        from: { email: 'noreply@xfuse.dev', name: 'Xfuse Contact Form' },
+        personalizations: [{ to: [{ email: process.env.CONTACT_EMAIL || 'hello@muhkam.com' }] }],
+        from: { email: 'noreply@muhkam.com', name: 'Muhkam Contact Form' },
         reply_to: { email: sanitized.email, name: sanitized.name },
         subject: `New Contact: ${sanitized.name}`,
         content: [{ type: 'text/html', value: `<h2>New Contact</h2><p><b>Name:</b> ${sanitized.name}</p><p><b>Email:</b> ${sanitized.email}</p><p><b>Company:</b> ${sanitized.company || 'N/A'}</p><hr><p>${sanitized.message.replace(/\n/g, '<br>')}</p>` }],

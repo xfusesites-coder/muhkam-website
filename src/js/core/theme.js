@@ -1,5 +1,5 @@
 /**
- * Xfuse — Theme Toggle (Dark/Light)
+ * Muhkam — Theme Toggle (Dark/Light)
  */
 export function initTheme() {
   const themeToggles = document.querySelectorAll('.theme-toggle');
@@ -7,7 +7,7 @@ export function initTheme() {
 
   const root = document.documentElement;
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  const saved = localStorage.getItem('xfuse-theme');
+  const saved = localStorage.getItem('muhkam-theme');
   const theme = saved || (prefersDark ? 'dark' : 'light');
 
   root.dataset.theme = theme;
@@ -18,7 +18,7 @@ export function initTheme() {
       const current = root.dataset.theme;
       const next = current === 'dark' ? 'light' : 'dark';
       root.dataset.theme = next;
-      localStorage.setItem('xfuse-theme', next);
+      localStorage.setItem('muhkam-theme', next);
       themeToggles.forEach(b => updateToggleIcon(b, next));
     });
   });

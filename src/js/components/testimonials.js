@@ -1,5 +1,5 @@
 /**
- * Xfuse — Testimonials Section
+ * Muhkam — Testimonials Section
  * Dynamically rebuilds testimonial cards from Supabase data
  * Loads data from Supabase → fallback to /data/testimonials.json → fallback to static HTML
  */

@@ -1,5 +1,5 @@
 /**
- * Xfuse — Custom Cursor (Desktop only)
+ * Muhkam — Custom Cursor (Desktop only)
  * Scene-aware: changes appearance based on current scene
  */
 import { isDesktop, prefersReducedMotion } from '../core/utils.js';

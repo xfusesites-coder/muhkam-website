@@ -1,5 +1,5 @@
 /**
- * Xfuse — Email Sender
+ * Muhkam — Email Sender
  * Supports SendGrid API or fallback to console log
  */
 
@@ -27,7 +27,7 @@ export async function sendEmail({ to, subject, name, email, company, message }) 
     },
     body: JSON.stringify({
       personalizations: [{ to: [{ email: to }] }],
-      from: { email: 'noreply@xfuse.dev', name: 'Xfuse Contact Form' },
+      from: { email: 'noreply@muhkam.com', name: 'Muhkam Contact Form' },
       reply_to: { email, name },
       subject,
       content: [

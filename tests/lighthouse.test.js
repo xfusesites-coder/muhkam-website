@@ -1,11 +1,13 @@
 /**
- * Xfuse — Lighthouse Performance Tests
- * Run: npx lighthouse http://localhost:3000 --output json --output-path ./lighthouse-report.json
+ * Muhkam — Lighthouse Performance Tests
+ * Requires dev server running on localhost:3000
  */
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { execSync } from 'child_process';
-import { readFileSync } from 'fs';
+import { readFileSync, unlinkSync, existsSync } from 'fs';
 
-const URL = 'http://localhost:3000';
+const SERVER_URL = 'http://localhost:3000';
+const REPORT_PATH = './lighthouse-report.json';
 const THRESHOLDS = {
   performance: 90,
   accessibility: 90,
@@ -13,42 +15,49 @@ const THRESHOLDS = {
   seo: 90,
 };
 
-async function runLighthouse() {
-  console.log('🔍 Running Lighthouse audit...\n');
-
+async function isServerRunning() {
   try {
-    execSync(
-      `npx lighthouse ${URL} --chrome-flags="--headless --no-sandbox" --output json --output-path ./lighthouse-report.json --quiet`,
-      { stdio: 'pipe' }
-    );
-
-    const report = JSON.parse(readFileSync('./lighthouse-report.json', 'utf-8'));
-    const categories = report.categories;
-    let passed = true;
-
-    for (const [key, threshold] of Object.entries(THRESHOLDS)) {
-      const score = Math.round((categories[key]?.score || 0) * 100);
-      const status = score >= threshold ? '✅' : '❌';
-      if (score < threshold) passed = false;
-      console.log(`${status} ${key}: ${score}/100 (threshold: ${threshold})`);
-    }
-
-    // Performance budget checks
-    const lcp = report.audits['largest-contentful-paint']?.numericValue || 0;
-    const cls = report.audits['cumulative-layout-shift']?.numericValue || 0;
-    const tbt = report.audits['total-blocking-time']?.numericValue || 0;
-
-    console.log(`\n📊 Core Web Vitals:`);
-    console.log(`  LCP: ${(lcp / 1000).toFixed(2)}s (budget: < 2.5s)`);
-    console.log(`  CLS: ${cls.toFixed(3)} (budget: < 0.1)`);
-    console.log(`  TBT: ${Math.round(tbt)}ms (budget: < 200ms)`);
-
-    console.log(`\n${passed ? '✅ All thresholds passed!' : '❌ Some thresholds failed.'}`);
-    process.exit(passed ? 0 : 1);
-  } catch (err) {
-    console.error('Lighthouse test failed:', err.message);
-    process.exit(1);
+    await fetch(SERVER_URL, { signal: AbortSignal.timeout(2000) });
+    return true;
+  } catch {
+    return false;
   }
 }
 
-runLighthouse();
+describe.skipIf(!await isServerRunning())('Lighthouse Audit', () => {
+  let report;
+
+  beforeAll(() => {
+    execSync(
+      `npx lighthouse ${SERVER_URL} --chrome-flags="--headless --no-sandbox" --output json --output-path ${REPORT_PATH} --quiet`,
+      { stdio: 'pipe' }
+    );
+    report = JSON.parse(readFileSync(REPORT_PATH, 'utf-8'));
+  });
+
+  afterAll(() => {
+    if (existsSync(REPORT_PATH)) unlinkSync(REPORT_PATH);
+  });
+
+  for (const [key, threshold] of Object.entries(THRESHOLDS)) {
+    it(`${key} score >= ${threshold}`, () => {
+      const score = Math.round((report.categories[key]?.score || 0) * 100);
+      expect(score).toBeGreaterThanOrEqual(threshold);
+    });
+  }
+
+  it('LCP < 2.5s', () => {
+    const lcp = report.audits['largest-contentful-paint']?.numericValue || 0;
+    expect(lcp).toBeLessThan(2500);
+  });
+
+  it('CLS < 0.1', () => {
+    const cls = report.audits['cumulative-layout-shift']?.numericValue || 0;
+    expect(cls).toBeLessThan(0.1);
+  });
+
+  it('TBT < 200ms', () => {
+    const tbt = report.audits['total-blocking-time']?.numericValue || 0;
+    expect(tbt).toBeLessThan(200);
+  });
+});

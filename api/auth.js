@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 import crypto from 'crypto';
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://muhkam.com').split(',').map(s => s.trim());
 
 if (!process.env.ADMIN_JWT_SECRET && process.env.NODE_ENV === 'production') {
   throw new Error('ADMIN_JWT_SECRET environment variable is required in production');
@@ -10,8 +10,8 @@ if (!process.env.ADMIN_PASSWORD && process.env.NODE_ENV === 'production') {
   throw new Error('ADMIN_PASSWORD environment variable is required in production');
 }
 
-const SECRET = new TextEncoder().encode((process.env.ADMIN_JWT_SECRET || 'xfuse-dev-secret-local-only').trim());
-const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || 'xfuse2024').trim();
+const SECRET = new TextEncoder().encode((process.env.ADMIN_JWT_SECRET || 'muhkam-dev-secret-local-only').trim());
+const ADMIN_PASSWORD = (process.env.ADMIN_PASSWORD || 'muhkam2024').trim();
 
 export async function createToken() {
   return await new SignJWT({ role: 'admin' })

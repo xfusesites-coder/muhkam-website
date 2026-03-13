@@ -1,5 +1,5 @@
 /**
- * Xfuse — Stats Section Dynamic Loader
+ * Muhkam — Stats Section Dynamic Loader
  * Loads stats from Supabase → fallback to data-target attributes in HTML
  */
 import { fetchTable } from '../lib/supabase.js';

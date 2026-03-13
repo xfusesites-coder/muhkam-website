@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="noindex, nofollow">
-  <title>Xfuse — لوحة التحكم</title>
+  <title>Muhkam — لوحة التحكم</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -910,7 +910,7 @@
   <!-- ==================== LOGIN ==================== -->
   <div class="login-page" id="loginPage">
     <div class="login-card">
-      <div class="login-logo">Xfuse</div>
+      <div class="login-logo">Muhkam</div>
       <p class="login-subtitle">لوحة التحكم — Dashboard</p>
       <form class="login-form" id="loginForm">
         <input type="password" class="login-input" id="loginPassword" placeholder="كلمة السر" autocomplete="current-password" required>
@@ -925,7 +925,7 @@
     <!-- Top Bar -->
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:0.75rem">
-        <span class="topbar__logo">Xfuse</span>
+        <span class="topbar__logo">Muhkam</span>
         <span class="topbar__label">لوحة التحكم</span>
       </div>
       <div class="topbar__actions">
@@ -1138,14 +1138,14 @@
 
   <script>
     /* ========================================================
-       Xfuse Dashboard — Client-Side Application (Enhanced)
+       Muhkam Dashboard — Client-Side Application (Enhanced)
        ======================================================== */
 
     const API_BASE = '';
     const DATA_BASE = '/data';
 
     // ==================== STATE ====================
-    let authToken = sessionStorage.getItem('xfuse_token') || null;
+    let authToken = sessionStorage.getItem('muhkam_token') || null;
     let currentPanel = 'overview';
     let data = {
       testimonials: { items: [] },
@@ -1255,7 +1255,7 @@
 
         if (res.ok && result.token) {
           authToken = result.token;
-          sessionStorage.setItem('xfuse_token', authToken);
+          sessionStorage.setItem('muhkam_token', authToken);
           await loadAllData();
           showDashboard();
           startTokenCheck();
@@ -1273,7 +1273,7 @@
 
     function logout() {
       authToken = null;
-      sessionStorage.removeItem('xfuse_token');
+      sessionStorage.removeItem('muhkam_token');
       stopTokenCheck();
       showLogin();
     }
@@ -2558,12 +2558,12 @@
       const current = html.getAttribute('data-theme');
       const next = current === 'light' ? 'dark' : 'light';
       html.setAttribute('data-theme', next);
-      localStorage.setItem('xfuse_admin_theme', next);
+      localStorage.setItem('muhkam_admin_theme', next);
       document.getElementById('themeToggle').textContent = next === 'light' ? '☀️' : '🌙';
     }
 
     function loadTheme() {
-      const saved = localStorage.getItem('xfuse_admin_theme') || 'dark';
+      const saved = localStorage.getItem('muhkam_admin_theme') || 'dark';
       document.documentElement.setAttribute('data-theme', saved);
       document.getElementById('themeToggle').textContent = saved === 'light' ? '☀️' : '🌙';
     }
@@ -2582,7 +2582,7 @@
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `xfuse-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.download = `muhkam-backup-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
       URL.revokeObjectURL(url);
       toast('تم تصدير البيانات ✓', 'success');

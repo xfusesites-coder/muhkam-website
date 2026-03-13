@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 6: "Trust & Testimonials"
+ * Muhkam — Scene 6: "Trust & Testimonials"
  * Mission control theme — scanlines, incoming transmissions, counters
  */
 import { prefersReducedMotion } from '../core/utils.js';

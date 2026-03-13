@@ -1,15 +1,62 @@
 /* === Process Timeline === */
+
+/* Section container */
+.scene--process {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-3xl) var(--space-lg);
+  position: relative;
+  overflow: hidden;
+}
+
+.process__header {
+  text-align: center;
+  margin-bottom: var(--space-3xl);
+}
+
+.process__header .section-label {
+  display: inline-block;
+  font-size: var(--text-small);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.process__header .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.process__header .section-desc {
+  font-size: var(--text-body);
+  color: var(--text-secondary);
+  max-width: 540px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Timeline layout */
 .process__timeline {
   display: flex;
   justify-content: space-between;
   position: relative;
-  max-width: 900px;
-  margin: var(--space-2xl) auto 0;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
 }
 
+/* Connecting line */
 .process__line {
   position: absolute;
-  top: 20px;
+  top: 24px;
   inset-inline-start: 0;
   inset-inline-end: 0;
   height: 2px;
@@ -18,16 +65,18 @@
 
 .process__line-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent-primary), #8B5CF6);
+  background: linear-gradient(90deg, var(--accent-primary), #8B5CF6, #EC4899);
   transform-origin: left;
   transform: scaleX(0);
-  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4);
+  will-change: transform;
 }
 
 [dir="rtl"] .process__line-fill {
   transform-origin: right;
 }
 
+/* Step */
 .process__step {
   text-align: center;
   position: relative;
@@ -36,26 +85,63 @@
   padding: 0 var(--space-sm);
 }
 
+/* Step number badge */
+.process__badge {
+  position: absolute;
+  top: -8px;
+  inset-inline-end: calc(50% - 28px);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-glass);
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  z-index: 2;
+  transition: all 0.4s ease;
+}
+
+.process__step.is-active .process__badge {
+  background: var(--step-color, var(--accent-primary));
+  border-color: var(--step-color, var(--accent-primary));
+  color: #fff;
+}
+
+/* Dot */
 .process__dot {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   background: var(--bg-card);
   border: 2px solid var(--border-glass);
   display: grid;
   place-items: center;
   margin: 0 auto var(--space-md);
-  font-size: var(--text-small);
   color: var(--text-muted);
   transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
+  cursor: default;
+}
+
+.process__dot svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.4s ease;
 }
 
 .process__dot.active {
-  background: var(--accent-primary);
-  border-color: var(--accent-primary);
+  background: var(--step-color, var(--accent-primary));
+  border-color: var(--step-color, var(--accent-primary));
   color: white;
-  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--step-color, var(--accent-primary)) 40%, transparent);
+  transform: scale(1.15);
+}
+
+.process__dot.active svg {
+  transform: scale(1.1);
 }
 
 /* Pulse ring on active dot */
@@ -64,16 +150,17 @@
   position: absolute;
   inset: -6px;
   border-radius: 50%;
-  border: 2px solid var(--accent-primary);
+  border: 2px solid var(--step-color, var(--accent-primary));
   opacity: 0;
-  animation: dot-pulse 2s ease-in-out infinite;
+  animation: process-dot-pulse 2s ease-in-out infinite;
 }
 
-@keyframes dot-pulse {
+@keyframes process-dot-pulse {
   0%   { transform: scale(0.8); opacity: 0.6; }
   100% { transform: scale(1.4); opacity: 0; }
 }
 
+/* Step text */
 .process__title {
   font-size: var(--text-body);
   font-weight: 600;
@@ -85,38 +172,134 @@
   font-size: var(--text-small);
   color: var(--text-secondary);
   line-height: 1.6;
+  max-width: 180px;
+  margin: 0 auto;
 }
 
-/* Mobile — vertical timeline */
+/* CTA */
+.process__cta {
+  text-align: center;
+  margin-top: var(--space-3xl);
+}
+
+.process__cta .btn--primary {
+  font-size: var(--text-body);
+  padding: var(--space-sm) var(--space-xl);
+}
+
+/* ── Tablet ── */
+@media (max-width: 1024px) {
+  .process__timeline {
+    max-width: 800px;
+  }
+
+  .process__desc {
+    max-width: 150px;
+    font-size: 0.8rem;
+  }
+}
+
+/* ── Mobile — vertical timeline ── */
 @media (max-width: 768px) {
+  .scene--process {
+    padding: var(--space-2xl) var(--space-md);
+  }
+
+  .process__header {
+    margin-bottom: var(--space-xl);
+  }
+
   .process__timeline {
     flex-direction: column;
     gap: var(--space-xl);
+    padding-inline-start: 40px;
   }
 
   .process__line {
     top: 0;
     bottom: 0;
-    inset-inline-start: 20px;
+    inset-inline-start: 15px;
     inset-inline-end: auto;
     width: 2px;
-    height: auto;
+    height: 100%;
   }
 
   .process__line-fill {
     transform-origin: top;
     width: 100%;
+    height: 100%;
+    transform: scaleY(0);
+    background: linear-gradient(180deg, var(--accent-primary), #8B5CF6, #EC4899);
+  }
+
+  [dir="rtl"] .process__line-fill {
+    transform-origin: top;
   }
 
   .process__step {
     text-align: start;
-    padding-inline-start: var(--space-3xl);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-md);
+    align-items: start;
+    padding: 0;
   }
 
   .process__dot {
-    position: absolute;
-    inset-inline-start: 0;
-    top: 0;
+    width: 40px;
+    height: 40px;
     margin: 0;
+    grid-row: 1 / 3;
+    position: relative;
+    left: -40px;
+  }
+
+  [dir="rtl"] .process__dot {
+    left: auto;
+    right: -40px;
+  }
+
+  .process__badge {
+    top: -6px;
+    inset-inline-end: -6px;
+    width: 18px;
+    height: 18px;
+    font-size: 0.6rem;
+  }
+
+  .process__desc {
+    max-width: none;
+  }
+
+  .process__title,
+  .process__desc {
+    grid-column: 2;
+  }
+}
+
+/* ── Small mobile ── */
+@media (max-width: 480px) {
+  .process__header .section-title {
+    font-size: 1.5rem;
+  }
+
+  .process__timeline {
+    padding-inline-start: 32px;
+  }
+
+  .process__dot {
+    width: 34px;
+    height: 34px;
+    left: -32px;
+  }
+
+  [dir="rtl"] .process__dot {
+    left: auto;
+    right: -32px;
+  }
+
+  .process__dot svg {
+    width: 16px;
+    height: 16px;
   }
 }

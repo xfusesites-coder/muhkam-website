@@ -1,5 +1,5 @@
 /**
- * Xfuse — Magnetic Buttons
+ * Muhkam — Magnetic Buttons
  * Buttons attract toward cursor on hover
  */
 import { isDesktop, prefersReducedMotion } from '../core/utils.js';

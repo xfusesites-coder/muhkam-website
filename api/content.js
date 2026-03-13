@@ -5,7 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 
 const DATA_DIR = join(process.cwd(), 'data');
 const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio', 'offers', 'contact_submissions'];
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://muhkam.com').split(',').map(s => s.trim());
 
 /* ─── Supabase client (service role for writes) ─── */
 const supabaseUrl = process.env.VITE_SUPABASE_URL;

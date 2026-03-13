@@ -1,5 +1,5 @@
 /**
- * Xfuse — Portfolio Parallax Depth Effect
+ * Muhkam — Portfolio Parallax Depth Effect
  * Shifts project image opposite to mouse on hover for depth illusion.
  * Desktop only, respects prefers-reduced-motion.
  */

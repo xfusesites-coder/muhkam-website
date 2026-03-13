@@ -1,5 +1,5 @@
 /**
- * Xfuse — Image Optimization Script
+ * Muhkam — Image Optimization Script
  * Converts images to WebP, generates thumbnails, and compresses
  * Run: node scripts/optimize-images.js
  * Requires: npm i -D sharp

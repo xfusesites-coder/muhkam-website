@@ -1,32 +1,25 @@
 /**
- * Xfuse — Accessibility Tests (axe-core)
- * Run: node tests/a11y.test.js
+ * Muhkam — Accessibility Tests (axe-core)
  * Requires: npm i -D @axe-core/cli
+ * Requires dev server running on localhost:3000
  */
+import { describe, it, expect } from 'vitest';
 import { execSync } from 'child_process';
 
-const URL = 'http://localhost:3000';
+const SERVER_URL = 'http://localhost:3000';
 
-async function runA11yTests() {
-  console.log('♿ Running accessibility audit...\n');
-
+async function isServerRunning() {
   try {
-    const output = execSync(`npx axe ${URL} --exit`, { encoding: 'utf-8' });
-    console.log(output);
-
-    if (output.includes('0 violations found')) {
-      console.log('✅ No accessibility violations found!');
-      process.exit(0);
-    } else {
-      console.log('❌ Accessibility violations detected.');
-      process.exit(1);
-    }
-  } catch (err) {
-    // axe-core exits with non-zero when violations found
-    console.log(err.stdout || err.message);
-    console.log('\n❌ Accessibility violations detected.');
-    process.exit(1);
+    await fetch(SERVER_URL, { signal: AbortSignal.timeout(2000) });
+    return true;
+  } catch {
+    return false;
   }
 }
 
-runA11yTests();
+describe.skipIf(!await isServerRunning())('Accessibility (axe-core)', () => {
+  it('has no accessibility violations', () => {
+    const output = execSync(`npx axe ${SERVER_URL} --exit`, { encoding: 'utf-8' });
+    expect(output).toContain('0 violations found');
+  });
+});

@@ -1,12 +1,12 @@
 /**
- * Xfuse — Admin Auth Handler
+ * Muhkam — Admin Auth Handler
  * Vercel Serverless Function
  * Simple password-based auth with JWT
  */
 import { SignJWT, jwtVerify } from 'jose';
 import crypto from 'crypto';
 
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://muhkam.com').split(',').map(s => s.trim());
 
 if (!process.env.ADMIN_JWT_SECRET && process.env.NODE_ENV === 'production') {
   throw new Error('ADMIN_JWT_SECRET environment variable is required in production');
@@ -15,8 +15,8 @@ if (!process.env.ADMIN_PASSWORD && process.env.NODE_ENV === 'production') {
   throw new Error('ADMIN_PASSWORD environment variable is required in production');
 }
 
-const SECRET = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET || 'xfuse-dev-secret-local-only');
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'xfuse2024';
+const SECRET = new TextEncoder().encode(process.env.ADMIN_JWT_SECRET || 'muhkam-dev-secret-local-only');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'muhkam2024';
 
 export async function createToken() {
   return await new SignJWT({ role: 'admin' })

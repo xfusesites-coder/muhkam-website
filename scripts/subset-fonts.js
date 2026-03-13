@@ -1,5 +1,5 @@
 /**
- * Xfuse — Font Subsetting Script
+ * Muhkam — Font Subsetting Script
  * Subsets fonts to only include used characters for smaller file size
  * Run: node scripts/subset-fonts.js
  * Requires: npm i -D subset-font

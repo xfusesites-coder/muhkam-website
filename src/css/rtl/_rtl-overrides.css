@@ -56,3 +56,10 @@
 
 /* Footer social icons row */
 [dir="rtl"] .footer__socials { direction: ltr; }
+
+/* Scene Why — Orbit container stays LTR for visual consistency */
+[dir="rtl"] .why__orbit-container { direction: ltr; }
+[dir="rtl"] .why__card-inner { direction: rtl; }
+[dir="rtl"] .why__center { direction: rtl; }
+[dir="rtl"] .why__side-panel { direction: rtl; }
+[dir="rtl"] .why__detail-title { font-family: var(--font-arabic); }

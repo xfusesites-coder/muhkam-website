@@ -1,4 +1,4 @@
-// Xfuse — Main Entry Point
+// Muhkam — Main Entry Point
 
 // Styles
 import '../css/main.css';
@@ -15,6 +15,7 @@ import { initNav } from './components/nav.js';
 import { initPreloader } from './effects/preloader.js';
 import { initCursor } from './effects/cursor.js';
 import { initScrollProgress } from './effects/scroll-progress.js';
+import { initCookieConsent } from './components/cookie-consent.js';
 
 // Lazy-load below-fold modules
 function lazyInit(importFn, exportName = 'default') {
@@ -40,16 +41,17 @@ document.addEventListener('DOMContentLoaded', () => {
     ['Nav', initNav],
     ['Cursor', initCursor],
     ['ScrollProgress', initScrollProgress],
+    ['CookieConsent', initCookieConsent],
   ];
 
   for (const [name, init] of critical) {
     try {
       const result = init();
       if (result && typeof result.catch === 'function') {
-        result.catch(err => console.error(`[Xfuse] Failed to init ${name}:`, err));
+        result.catch(err => console.error(`[Muhkam] Failed to init ${name}:`, err));
       }
     } catch (err) {
-      console.error(`[Xfuse] Failed to init ${name}:`, err);
+      console.error(`[Muhkam] Failed to init ${name}:`, err);
     }
   }
 
@@ -58,6 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const deferred = [
       ['Scene1', lazyInit(() => import('./scenes/scene-1.js'), 'initScene1')],
       ['Scene2', lazyInit(() => import('./scenes/scene-2.js'), 'initScene2')],
+      ['SceneWhy', lazyInit(() => import('./scenes/scene-why.js'), 'initSceneWhy')],
+      ['SceneProcess', lazyInit(() => import('./scenes/scene-process.js'), 'initSceneProcess')],
       ['Scene3', lazyInit(() => import('./scenes/scene-3.js'), 'initScene3')],
       ['Scene4', lazyInit(() => import('./scenes/scene-4.js'), 'initScene4')],
       ['Offers', lazyInit(() => import('./scenes/scene-offers-faq.js'), 'initOffers')],
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           await init();
         } catch (err) {
-          console.error(`[Xfuse] Failed to init ${name}:`, err);
+          console.error(`[Muhkam] Failed to init ${name}:`, err);
         }
       }
       // Re-apply language visibility to dynamically loaded content

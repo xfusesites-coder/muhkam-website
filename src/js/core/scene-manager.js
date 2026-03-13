@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene Manager
+ * Muhkam — Scene Manager
  * Sets up ScrollTrigger pinning for each scene in DOM order.
  * Uses function-based values for safe responsive behavior.
  */

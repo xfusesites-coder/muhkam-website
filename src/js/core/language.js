@@ -1,12 +1,12 @@
 /**
- * Xfuse — Language Toggle (EN/AR)
+ * Muhkam — Language Toggle (EN/AR)
  */
 export function initLanguage() {
   const langToggles = document.querySelectorAll('.lang-toggle');
   if (!langToggles.length) return;
 
   const root = document.documentElement;
-  const savedLang = localStorage.getItem('xfuse-lang') || 'en';
+  const savedLang = localStorage.getItem('muhkam-lang') || 'en';
   setLanguage(savedLang);
 
   langToggles.forEach(btn => {
@@ -14,7 +14,7 @@ export function initLanguage() {
       const current = root.lang;
       const next = current === 'en' ? 'ar' : 'en';
       setLanguage(next);
-      localStorage.setItem('xfuse-lang', next);
+      localStorage.setItem('muhkam-lang', next);
     });
   });
 

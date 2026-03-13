@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scroll Reveal (GSAP ScrollTrigger)
+ * Muhkam — Scroll Reveal (GSAP ScrollTrigger)
  * Generic reveal animation for sections + parallax depth effects
  */
 import { prefersReducedMotion } from '../core/utils.js';
@@ -46,7 +46,7 @@ export function initScrollReveal() {
     );
   }
 
-  // Why Xfuse cards
+  // Why Muhkam cards
   const whyCards = document.querySelectorAll('.why-card');
   if (whyCards.length) {
     gsap.fromTo(whyCards,

@@ -1,5 +1,5 @@
 /**
- * Xfuse — Offers Section Dynamic Loader
+ * Muhkam — Offers Section Dynamic Loader
  * Loads pricing cards from Supabase → fallback to /data/offers.json
  */
 import { fetchTable, fetchSetting } from '../lib/supabase.js';

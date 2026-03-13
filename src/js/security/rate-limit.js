@@ -1,8 +1,8 @@
 /**
- * Xfuse — Client-side Rate Limiting
+ * Muhkam — Client-side Rate Limiting
  * Prevents form spam (max 3 submissions in 5 minutes)
  */
-const RATE_LIMIT_KEY = 'xfuse-form-submissions';
+const RATE_LIMIT_KEY = 'muhkam-form-submissions';
 const MAX_SUBMISSIONS = 3;
 const WINDOW_MS = 5 * 60 * 1000; // 5 minutes
 

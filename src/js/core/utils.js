@@ -1,5 +1,5 @@
 /**
- * Xfuse — Core Utilities
+ * Muhkam — Core Utilities
  */
 
 /** Throttle — limits function execution frequency */

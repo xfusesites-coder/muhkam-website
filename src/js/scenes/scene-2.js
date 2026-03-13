@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 2: "Strategy & Design"
+ * Muhkam — Scene 2: "Strategy & Design"
  * Blueprint wireframe → high-fidelity mockup transition
  * Multi-phase: Grid → Wireframe → Annotations/Cursor → Mockup → Text → Exit
  */

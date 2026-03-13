@@ -1,5 +1,5 @@
 /**
- * Xfuse — Card Spotlight Effect (Stripe-style)
+ * Muhkam — Card Spotlight Effect (Stripe-style)
  * Radial gradient follows mouse over cards
  */
 import { isDesktop } from '../core/utils.js';

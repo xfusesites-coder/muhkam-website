@@ -1,0 +1,54 @@
+{
+  "items": [
+    {
+      "id": "1",
+      "title_ar": "الاكتشاف",
+      "title_en": "Discovery",
+      "description_ar": "بنسمعك. بنفهم شغلك والمستخدمين بتوعك وأهدافك. بدون افتراضات.",
+      "description_en": "We listen. Understand your business, your users, and your goals. No assumptions.",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.3-4.3\"/></svg>",
+      "accent_color": "#3B82F6",
+      "display_order": 1
+    },
+    {
+      "id": "2",
+      "title_ar": "الاستراتيجية والتصميم",
+      "title_en": "Strategy & Design",
+      "description_ar": "Wireframes وبروتوتايب وخريطة منتج واضحة. بتشوف الحاجة قبل ما نبنيها.",
+      "description_en": "Wireframes, prototypes, and a clear product roadmap. You see it before we build it.",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M12 2v8l4-2\"/><circle cx=\"12\" cy=\"14\" r=\"8\"/></svg>",
+      "accent_color": "#8B5CF6",
+      "display_order": 2
+    },
+    {
+      "id": "3",
+      "title_ar": "التطوير",
+      "title_en": "Development",
+      "description_ar": "سبرينتات Agile مع عروض أسبوعية. دايماً في الصورة، مفيش مفاجآت.",
+      "description_en": "Agile sprints with weekly demos. You're always in the loop, never in the dark.",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"16 18 22 12 16 6\"/><polyline points=\"8 6 2 12 8 18\"/></svg>",
+      "accent_color": "#EC4899",
+      "display_order": 3
+    },
+    {
+      "id": "4",
+      "title_ar": "الاختبار والجودة",
+      "title_en": "Testing & QA",
+      "description_ar": "اختبار دقيق على أجهزة حقيقية. بنكسرها عشان المستخدمين مش يحتاجوا يعملوا كده.",
+      "description_en": "Rigorous testing on real devices. We break it so your users don't have to.",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 12l2 2 4-4\"/><path d=\"M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z\"/></svg>",
+      "accent_color": "#10B981",
+      "display_order": 4
+    },
+    {
+      "id": "5",
+      "title_ar": "الإطلاق والدعم",
+      "title_en": "Launch & Support",
+      "description_ar": "تشغيل سلس ومتابعة بعد الإطلاق. بنفضل معاك لحد ما كل حاجة تمشي زي الساعة.",
+      "description_en": "Smooth deployment and post-launch monitoring. We stay until everything runs perfectly.",
+      "icon_svg": "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 00-2.91-.09z\"/><path d=\"m12 15-3-3a22 22 0 012-3.95A12.88 12.88 0 0122 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 01-4 2z\"/><path d=\"M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0\"/><path d=\"M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5\"/></svg>",
+      "accent_color": "#F59E0B",
+      "display_order": 5
+    }
+  ]
+}

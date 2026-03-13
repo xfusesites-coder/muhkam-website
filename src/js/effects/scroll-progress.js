@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scroll Progress Bar + Scene Progress Dots
+ * Muhkam — Scroll Progress Bar + Scene Progress Dots
  */
 export function initScrollProgress() {
   const bar = document.querySelector('.scroll-progress');
@@ -10,7 +10,7 @@ export function initScrollProgress() {
 
   // Ordered section IDs matching dot order
   const sectionIds = [
-    'scene-0', 'scene-1', 'scene-2', 'scene-3', 'scene-4',
+    'scene-0', 'scene-1', 'scene-2', 'scene-why', 'scene-process', 'scene-3', 'scene-4',
     'scene-offers', 'scene-5', 'scene-6', 'scene-faq', 'scene-7'
   ];
 

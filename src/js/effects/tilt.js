@@ -1,5 +1,5 @@
 /**
- * Xfuse — Lightweight 3D Tilt Effect
+ * Muhkam — Lightweight 3D Tilt Effect
  * Applies perspective tilt on mousemove to card elements.
  * Desktop only, respects prefers-reduced-motion.
  */

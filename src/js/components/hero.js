@@ -1,5 +1,5 @@
 /**
- * Xfuse — Hero Animations (GSAP)
+ * Muhkam — Hero Animations (GSAP)
  */
 import { prefersReducedMotion } from '../core/utils.js';
 

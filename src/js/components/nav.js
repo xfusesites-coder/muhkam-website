@@ -1,5 +1,5 @@
 /**
- * Xfuse — Navigation
+ * Muhkam — Navigation
  */
 import { throttle, scrollToTarget } from '../core/utils.js';
 

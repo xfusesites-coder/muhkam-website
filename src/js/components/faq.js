@@ -1,5 +1,5 @@
 /**
- * Xfuse — FAQ Section Dynamic Loader
+ * Muhkam — FAQ Section Dynamic Loader
  * Loads FAQ from Supabase → fallback to hardcoded HTML
  */
 import { fetchTable } from '../lib/supabase.js';

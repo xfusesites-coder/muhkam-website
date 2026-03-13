@@ -1,5 +1,5 @@
 /**
- * Xfuse — Preloader
+ * Muhkam — Preloader
  * Hides the loading screen once fonts + GSAP are ready.
  */
 export function initPreloader() {

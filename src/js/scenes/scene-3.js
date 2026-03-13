@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 3: "Development"
+ * Muhkam — Scene 3: "Development"
  * Split-screen code editor + mockup
  * Scroll-synced typing effect + tech marquee
  */

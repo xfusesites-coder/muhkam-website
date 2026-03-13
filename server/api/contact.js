@@ -1,5 +1,5 @@
 /**
- * Xfuse — Contact Form Handler
+ * Muhkam — Contact Form Handler
  * Vercel Serverless Function
  */
 import { validateContactForm } from '../middleware/validator.js';
@@ -47,7 +47,7 @@ export default async function handler(req, res) {
 
     // Send email
     await sendEmail({
-      to: process.env.CONTACT_EMAIL || 'hello@xfuse.dev',
+      to: process.env.CONTACT_EMAIL || 'hello@muhkam.com',
       subject: `New Contact: ${sanitized.name}`,
       name: sanitized.name,
       email: sanitized.email,

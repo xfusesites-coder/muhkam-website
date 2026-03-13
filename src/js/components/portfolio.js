@@ -1,5 +1,5 @@
 /**
- * Xfuse — Portfolio Section
+ * Muhkam — Portfolio Section
  * Loads data from Supabase → fallback to /data/portfolio.json
  */
 import { prefersReducedMotion } from '../core/utils.js';

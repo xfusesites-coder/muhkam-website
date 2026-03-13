@@ -1,5 +1,5 @@
 /**
- * Xfuse — CSRF Token Validation (Stateless HMAC)
+ * Muhkam — CSRF Token Validation (Stateless HMAC)
  * Works on serverless (Vercel) — no in-memory state needed.
  * Uses HMAC-signed tokens with embedded timestamp.
  */

@@ -1,5 +1,5 @@
 /**
- * Xfuse — Run SQL schema on Supabase
+ * Muhkam — Run SQL schema on Supabase
  * Usage: node scripts/setup-supabase.js
  */
 import 'dotenv/config';

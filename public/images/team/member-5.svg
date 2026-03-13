@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" rx="20" fill="#12122A"/>
+  <circle cx="200" cy="150" r="65" fill="#1E3A5F"/>
+  <circle cx="200" cy="150" r="55" fill="#1A1A35"/>
+  <text x="200" y="170" text-anchor="middle" font-family="system-ui,sans-serif" font-size="48" font-weight="700" fill="#10B981" opacity="0.8">MH</text>
+  <text x="200" y="280" text-anchor="middle" font-family="system-ui,sans-serif" font-size="20" font-weight="600" fill="#E2E8F0">Mostafa Hany</text>
+  <text x="200" y="310" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" fill="#64748B">Full-Stack Developer</text>
+</svg>

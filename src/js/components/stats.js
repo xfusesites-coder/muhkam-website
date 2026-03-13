@@ -1,5 +1,5 @@
 /**
- * Xfuse — Stats Counter Animation with Typing Effect
+ * Muhkam — Stats Counter Animation with Typing Effect
  */
 import { prefersReducedMotion } from '../core/utils.js';
 
@@ -29,7 +29,7 @@ export function initStats() {
     onEnter: () => {
       if (typingLine && !typingDone) {
         typingDone = true;
-        const text = '$ xfuse --stats';
+        const text = '$ muhkam --stats';
         let i = 0;
         typingLine.textContent = '';
         typingLine.style.display = 'block';

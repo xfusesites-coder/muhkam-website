@@ -1,5 +1,5 @@
 /**
- * Xfuse — Server-side Rate Limiter (Serverless-compatible)
+ * Muhkam — Server-side Rate Limiter (Serverless-compatible)
  * 
  * Uses in-memory Map as a best-effort rate limiter for serverless.
  * On Vercel, each cold start resets the map — this provides partial

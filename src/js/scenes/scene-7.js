@@ -1,5 +1,5 @@
 /**
- * Xfuse — Scene 7: "Your Turn" (Contact)
+ * Muhkam — Scene 7: "Your Turn" (Contact)
  * Reverse big bang → form reveal, staggered fields, pulsing CTA
  */
 import { prefersReducedMotion } from '../core/utils.js';

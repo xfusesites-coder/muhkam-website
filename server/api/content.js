@@ -1,5 +1,5 @@
 /**
- * Xfuse — Content API Handler
+ * Muhkam — Content API Handler
  * Vercel Serverless Function
  * CRUD operations for testimonials, team, portfolio, and offers content
  */
@@ -9,7 +9,7 @@ import { verifyToken } from './auth.js';
 
 const DATA_DIR = join(process.cwd(), 'data');
 const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio', 'offers'];
-const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://xfuse.vercel.app').split(',').map(s => s.trim());
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || 'https://muhkam.com').split(',').map(s => s.trim());
 
 function getDataPath(type) {
   return join(DATA_DIR, `${type}.json`);

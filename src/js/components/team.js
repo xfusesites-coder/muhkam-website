@@ -1,5 +1,5 @@
 /**
- * Xfuse — Team Section
+ * Muhkam — Team Section
  * Dynamically rebuilds team member cards from Supabase data
  * Loads data from Supabase → fallback to /data/team.json → fallback to static HTML
  */

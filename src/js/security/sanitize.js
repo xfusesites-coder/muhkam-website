@@ -1,5 +1,5 @@
 /**
- * Xfuse — Input Sanitization & Validation
+ * Muhkam — Input Sanitization & Validation
  */
 
 /** Sanitize user input to prevent XSS */

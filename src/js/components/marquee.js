@@ -1,5 +1,5 @@
 /**
- * Xfuse — Marquee (pause on hover is CSS-only, JS handles RTL awareness if needed)
+ * Muhkam — Marquee (pause on hover is CSS-only, JS handles RTL awareness if needed)
  */
 export function initMarquee() {
   // Marquee is pure CSS. This module exists for future interactivity.

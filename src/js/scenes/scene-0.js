@@ -1,7 +1,7 @@
 /**
- * Xfuse — Scene 0: "The Spark"
+ * Muhkam — Scene 0: "The Spark"
  * A dot of light grows, explodes into particles,
- * particles form the Xfuse logo, text reveals with blur effect,
+ * particles form the Muhkam logo, text reveals with blur effect,
  * logo shrinks and docks into the navbar.
  */
 import { prefersReducedMotion } from '../core/utils.js';
@@ -58,7 +58,7 @@ class ParticleSystem {
   }
 
   setLogoTargets() {
-    // Create "Xfuse" text on an offscreen canvas to get pixel positions
+    // Create "Muhkam" text on an offscreen canvas to get pixel positions
     const offscreen = document.createElement('canvas');
     const offCtx = offscreen.getContext('2d');
     const fontSize = Math.min(this.w * 0.15, 120);
@@ -68,7 +68,7 @@ class ParticleSystem {
     offCtx.font = `800 ${fontSize}px 'Syne', sans-serif`;
     offCtx.textAlign = 'center';
     offCtx.textBaseline = 'middle';
-    offCtx.fillText('Xfuse', this.w / 2, this.h / 2);
+    offCtx.fillText('Muhkam', this.w / 2, this.h / 2);
 
     const imageData = offCtx.getImageData(0, 0, this.w, this.h);
     const points = [];

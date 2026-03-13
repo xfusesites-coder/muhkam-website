@@ -18,8 +18,8 @@ function copyDataPlugin() {
 
 /* ─── Dev API middleware ─── */
 function devApiPlugin() {
-  const JWT_SECRET = 'xfuse-dev-secret';
-  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'xfuse2024';
+  const JWT_SECRET = 'muhkam-dev-secret';
+  const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'muhkam2024';
   const ALLOWED_TYPES = ['testimonials', 'team', 'portfolio', 'offers', 'contact_submissions'];
 
   /* ── Supabase client (service role for dev API) ── */
@@ -375,5 +375,8 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
+  },
+  test: {
+    include: ['tests/**/*.test.js'],
   },
 });

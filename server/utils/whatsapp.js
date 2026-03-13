@@ -1,5 +1,5 @@
 /**
- * Xfuse — WhatsApp API Integration (Optional)
+ * Muhkam — WhatsApp API Integration (Optional)
  * Sends notification to WhatsApp when a contact form is submitted
  */
 

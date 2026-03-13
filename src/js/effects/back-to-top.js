@@ -1,5 +1,5 @@
 /**
- * Xfuse — Back to Top Button with Progress Ring
+ * Muhkam — Back to Top Button with Progress Ring
  */
 export function initBackToTop() {
   const btn = document.querySelector('.back-to-top');

@@ -50,7 +50,7 @@ export async function initPortfolio() {
           descriptionAr: p.description_ar || p.descriptionAr || '',
           tagEn: p.tag_en || p.tagEn || '',
           tagAr: p.tag_ar || p.tagAr || '',
-          image: p.image_url || p.image || '',
+          image: (p.image_url || p.image || '').replace(/^\/src\/assets\/images\//, '/images/'),
           link: p.project_link || p.link || '',
           featured: p.featured || false,
         }));

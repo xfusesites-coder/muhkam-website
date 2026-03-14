@@ -155,4 +155,20 @@ export function initScene4() {
       duration: 0.04, force3D: true
     }, 0.94);
   }
+
+  // Make project cards clickable — navigate to project website
+  projects.forEach(proj => {
+    const link = proj.dataset.link;
+    if (!link) return;
+    proj.style.cursor = 'pointer';
+    proj.setAttribute('role', 'link');
+    proj.setAttribute('tabindex', '0');
+    proj.addEventListener('click', () => window.open(link, '_blank', 'noopener,noreferrer'));
+    proj.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        window.open(link, '_blank', 'noopener,noreferrer');
+      }
+    });
+  });
 }
